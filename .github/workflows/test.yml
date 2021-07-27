@@ -1,0 +1,19 @@
+name: Test
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.3.0
+        with:
+          node-version: "14"
+          cache: "npm"
+      - run: npm install
+      - run: npm run test
+        env:
+          CI: true
