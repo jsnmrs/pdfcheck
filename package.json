@@ -3,12 +3,13 @@
   "description": "Check PDF files for accessibility features",
   "main": "index.html",
   "devDependencies": {
-    "eslint": "8.1.0",
+    "eslint": "8.3.0",
     "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-compat": "4.0.0",
     "eslint-plugin-es5": "1.5.0",
     "eslint-plugin-prettier": "4.0.0",
-    "prettier": "2.4.1",
-    "serve": "12.0.1"
+    "prettier": "2.5.0",
+    "serve": "13.0.2"
   },
   "scripts": {
     "eslint": "eslint *.js --fix",
