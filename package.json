@@ -8,7 +8,7 @@
     "eslint-plugin-compat": "4.0.2",
     "eslint-plugin-es5": "1.5.0",
     "eslint-plugin-prettier": "4.0.0",
-    "prettier": "2.5.1",
+    "prettier": "2.6.1",
     "serve": "13.0.2"
   },
   "scripts": {
