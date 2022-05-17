@@ -1,21 +1,22 @@
-name: Dependabot auto-approve
-on: pull_request
-
-permissions:
-  pull-requests: write
+name: Dependency mgmt
+on:
+  workflow_dispatch: # enable run button on github.com
+  schedule:
+    - cron: '0 23 * * 2'
 
 jobs:
-  dependabot:
+  update-deps:
+    name: Update Node dependencies
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }}
+
     steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v1.3.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: Approve a PR
-        run: gh pr review --approve "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          node-version: "16"
+      - run: npm install
+      - uses: neverendingqs/gh-action-node-update-deps@v2
+        with:
+          git-user-email: wise.spot4836@fastmail.com'
+          git-user-name: dependency-mgmt
+          pre-commit-script: npm run test
