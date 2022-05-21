@@ -19,4 +19,4 @@ jobs:
         with:
           git-user-email: wise.spot4836@fastmail.com'
           git-user-name: dependency-mgmt
-          pre-commit-script: npm run test
+          pre-commit-script: npm run test # new PR won't trigger tests
