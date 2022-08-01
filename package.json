@@ -9,7 +9,7 @@
     "eslint-plugin-es5": "1.5.0",
     "eslint-plugin-prettier": "4.2.1",
     "prettier": "2.7.1",
-    "serve": "13.0.2"
+    "serve": "14.0.1"
   },
   "scripts": {
     "eslint": "eslint *.js --fix",
