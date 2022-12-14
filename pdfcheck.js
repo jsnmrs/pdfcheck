@@ -4,11 +4,16 @@
   var form = document.querySelector("#dropzone"),
     input = form.querySelector('input[type="file"]'),
     label = form.querySelector("label"),
+    button = form.querySelector('button[type="submit"]'),
     droppedFiles = false;
 
   input.addEventListener("change", function processStart(e) {
     showFiles(e.target.files);
-    processFiles(e.target.files);
+  });
+
+  button.addEventListener("click", function submitStart(e) {
+    e.preventDefault();
+    processFiles(input.files);
   });
 
   if (isAdvancedUpload()) {
@@ -29,6 +34,7 @@
 
     form.addEventListener("drop", function fileDrop(e) {
       droppedFiles = e.dataTransfer.files;
+      button.style.display = "none";
       showFiles(droppedFiles);
       processFiles(droppedFiles);
     });
