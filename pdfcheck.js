@@ -71,11 +71,11 @@
     }
   }
 
-  function addFlag(className, innerHTML) {
+  function addFlag(className, markup) {
     var tempNode = document.createElement("p");
 
     tempNode.className = "flag " + className;
-    tempNode.innerHTML = innerHTML;
+    tempNode.innerHTML = markup;
     document.getElementById("report").appendChild(tempNode);
   }
 
@@ -265,7 +265,7 @@
   }
 
   function processFiles(files) {
-    document.getElementById("report").innerHTML = "";
+    document.getElementById("report").text = "";
     readMultiFiles(files);
   }
 
