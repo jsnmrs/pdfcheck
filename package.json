@@ -3,9 +3,11 @@
   "description": "Check PDF files for accessibility features",
   "main": "index.html",
   "devDependencies": {
+    "@babel/core": "7.20.7",
+    "@babel/eslint-parser": "7.19.1",
+    "@babel/preset-env": "7.20.2",
     "eslint": "8.30.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-prettier": "4.2.1",
     "prettier": "2.8.1",
     "serve": "14.1.2"
   },
