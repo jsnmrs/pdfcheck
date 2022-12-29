@@ -1,6 +1,6 @@
 # PDFcheck
 
-Quickly check PDF files for accessibility red flags. Not guarantee of accessibility, but a fast indication of inaccessibility.
+Quickly check PDF files for accessibility red flags. Drag and drop one or one hundred files and receive **immediate indication of PDF inaccessibility**. Read the [PDFcheck blog post](https://jasonmorris.com/code/pdfcheck).
 
 <https://jsnmrs.github.io/pdfcheck>
 
