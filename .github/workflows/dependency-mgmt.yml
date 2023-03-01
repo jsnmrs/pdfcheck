@@ -3,7 +3,7 @@ name: Dependency updater
 on:
   workflow_dispatch: # enable run button on github.com
   schedule:
-    - cron: "0 18 1,15 * *" # On the 1st and 15th of the month at 18:00.
+    - cron: "30 0 1 * *" # On the 1st of the month at 00:30
 
 jobs:
   update:
@@ -37,4 +37,4 @@ jobs:
           delete-branch: true
           title: "Update NPM dependencies"
           body: |
-            Updated NPM dependencies via [GitHub Action](https://github.com/jsnmrs/jasonmorris/actions/workflows/dep-dude.yml)
+            Updated NPM dependencies via GitHub Action
