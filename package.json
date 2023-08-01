@@ -4,12 +4,12 @@
   "main": "index.html",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "7.22.5",
-    "@babel/eslint-parser": "7.22.5",
-    "@babel/preset-env": "7.22.5",
-    "eslint": "8.44.0",
-    "eslint-config-prettier": "8.8.0",
-    "prettier": "2.8.8",
+    "@babel/core": "7.22.9",
+    "@babel/eslint-parser": "7.22.9",
+    "@babel/preset-env": "7.22.9",
+    "eslint": "8.46.0",
+    "eslint-config-prettier": "8.9.0",
+    "prettier": "3.0.0",
     "serve": "14.2.0"
   },
   "scripts": {
