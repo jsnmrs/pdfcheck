@@ -4,10 +4,10 @@
   "main": "index.html",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "7.22.11",
-    "@babel/eslint-parser": "7.22.11",
-    "@babel/preset-env": "7.22.14",
-    "eslint": "8.48.0",
+    "@babel/core": "7.23.0",
+    "@babel/eslint-parser": "7.22.15",
+    "@babel/preset-env": "7.22.20",
+    "eslint": "8.50.0",
     "eslint-config-prettier": "9.0.0",
     "prettier": "3.0.3",
     "serve": "14.2.1"
