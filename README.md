@@ -6,8 +6,7 @@ Immediately check one or one hundred PDF files for signs of inaccessibility. Rea
 
 ## Running locally
 
-1. `npm install`
-2. `npm run work`
+1. `npx serve`
 
 ## References
 
