@@ -128,13 +128,11 @@
     const dataHeader = fileData.substr(0, 8);
     const matchHeader = regexHeader.exec(dataHeader);
 
-    // If no match is found, report the file as invalid
     if (!matchHeader) {
       const markup = "<strong>Not a valid PDF file</strong>";
       ui.addFlag("default", markup);
       return false;
     }
-    // If a match is found, report the PDF version number
     const markup = `<span>PDF Version:</span> <strong>${matchHeader[1]}</strong>`;
     ui.addFlag("default", markup);
     return true;
@@ -147,11 +145,9 @@
     let markup;
 
     if (matchTree) {
-      // If a match is found, indicate that the document is tagged and show the number of tags
       markup = `<span>Tagged <a href="#help-tagged" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Yes (${matchTree[1]} tags)</strong>`;
       ui.addFlag("success", markup);
     } else {
-      // If no match is found, indicate that the document is not tagged
       markup = '<span>Tagged <a href="#help-tagged" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>No</strong>';
       ui.addFlag("failure", markup);
     }
