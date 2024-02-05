@@ -131,13 +131,13 @@
 
     if (!matchHeader) {
       markup = "<strong>Not a valid PDF file</strong>";
-      addFlag("default", markup);
+      ui.addFlag("default", markup);
 
       return false;
     }
     markup =
       "<span>PDF Version:</span> <strong>" + matchHeader[1] + "</strong>";
-    addFlag("default", markup);
+    ui.addFlag("default", markup);
 
     return true;
   }
@@ -153,11 +153,11 @@
         '<span>Tagged <a href="#help-tagged" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Yes (' +
         matchTree[1] +
         " tags)</strong>";
-      addFlag("success", markup);
+      ui.addFlag("success", markup);
     } else {
       markup =
         '<span>Tagged <a href="#help-tagged" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>No</strong>';
-      addFlag("failure", markup);
+      ui.addFlag("failure", markup);
     }
   }
 
@@ -176,11 +176,11 @@
         '<span>Language <a href="#help-language" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>' +
         matchLang[1] +
         "</strong>";
-      addFlag("success", markup);
+      ui.addFlag("success", markup);
     } else {
       markup =
         '<span>Language <a href="#help-language" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>not set</strong>';
-      addFlag("failure", markup);
+      ui.addFlag("failure", markup);
     }
   }
 
@@ -194,16 +194,16 @@
       if (matchMarked[1] === "true") {
         markup =
           '<span>Marked <a href="#help-marked" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>True</strong>';
-        addFlag("success", markup);
+        ui.addFlag("success", markup);
       } else {
         markup =
           '<span>Marked <a href="#help-marked" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>False</strong>';
-        addFlag("warning", markup);
+        ui.addFlag("warning", markup);
       }
     } else {
       markup =
         '<span>Marked <a href="#help-marked" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>No</strong>';
-      addFlag("failure", markup);
+      ui.addFlag("failure", markup);
     }
   }
 
@@ -216,11 +216,11 @@
     if (matchPDFUA) {
       markup =
         '<span>PDF/UA identifier <a href="#help-pdfua" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Yes</strong>';
-      addFlag("success", markup);
+      ui.addFlag("success", markup);
     } else {
       markup =
         '<span>PDF/UA identifier <a href="#help-pdfua" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>';
-      addFlag("warning", markup);
+      ui.addFlag("warning", markup);
     }
   }
 
@@ -237,18 +237,18 @@
       if (matchEmpty) {
         markup =
           '<span>Document Title <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Empty</strong>';
-        addFlag("warning", markup);
+        ui.addFlag("warning", markup);
       } else {
         markup =
           '<span>Document Title <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>' +
           matchTitle[1] +
           "</strong>";
-        addFlag("default", markup);
+        ui.addFlag("default", markup);
       }
     } else {
       markup =
         '<span>Document Title <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>';
-      addFlag("failure", markup);
+      ui.addFlag("failure", markup);
     }
   }
 
@@ -268,14 +268,6 @@
     fileLabel = "[" + fileExt + " - " + fileSize + fileSizeSuffix + "]";
     markup =
       fileNumber + ". " + file.name + " <small>" + fileLabel + "</small>";
-    addFlag("title", markup);
-  }
-
-  function addFlag(className, markup) {
-    var tempNode = document.createElement("p");
-
-    tempNode.className = "flag " + className;
-    tempNode.innerHTML = markup;
-    document.getElementById("report").appendChild(tempNode);
+    ui.addFlag("title", markup);
   }
 })();
