@@ -1,83 +1,126 @@
 (function pdfCheck() {
-  "use strict";
-
-  var form = document.querySelector("#dropzone"),
-    input = form.querySelector('input[type="file"]'),
-    label = form.querySelector("label"),
-    button = form.querySelector('button[type="submit"]'),
-    droppedFiles = false;
-
-  input.addEventListener("change", function processStart(e) {
-    showFiles(e.target.files);
-  });
-
-  button.addEventListener("click", function submitStart(e) {
-    e.preventDefault();
-    processFiles(input.files);
-  });
-
-  if (isAdvancedUpload()) {
-    form.addEventListener("drag", stopShort, false);
-    form.addEventListener("dragstart", stopShort, false);
-    form.addEventListener("dragend", stopShort, false);
-    form.addEventListener("dragover", stopShort, false);
-    form.addEventListener("dragenter", stopShort, false);
-    form.addEventListener("dragleave", stopShort, false);
-    form.addEventListener("drop", stopShort, false);
-
-    form.addEventListener("dragover", dragIn, false);
-    form.addEventListener("dragenter", dragIn, false);
-
-    form.addEventListener("dragleave", dragOut, false);
-    form.addEventListener("dragend", dragOut, false);
-    form.addEventListener("drop", dragOut, false);
-
-    form.addEventListener("drop", function fileDrop(e) {
-      droppedFiles = e.dataTransfer.files;
-      button.style.display = "none";
-      showFiles(droppedFiles);
-      processFiles(droppedFiles);
-    });
-  }
-
-  // Firefox focus bug fix for file input
-  input.addEventListener("focus", function fileFocus() {
-    input.classList.add("has-focus");
-  });
-
-  input.addEventListener("blur", function fileBlur() {
-    input.classList.remove("has-focus");
-  });
-
-  function dragIn() {
-    form.classList.add("is-dragover");
-  }
-
-  function dragOut() {
-    form.classList.remove("is-dragover");
-  }
-
-  function stopShort(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  function showFiles(files) {
-    label.textContent = files[0].name;
-    if (files.length > 1) {
-      label.textContent = input
-        .getAttribute("data-multiple-caption")
-        .replace("{count}", files.length);
+  // Utility functions for UI updates and event handling
+  const ui = {
+    showFiles: function(files) {
+      const label = document.querySelector("#dropzone label");
+      const fileName = files.length > 1
+        ? document.querySelector('input[type="file"]').getAttribute("data-multiple-caption").replace("{count}", files.length)
+        : files[0].name;
+      label.textContent = fileName;
+    },
+    toggleButtonDisplay: function(display = 'none') {
+      const button = document.querySelector('#dropzone button[type="submit"]');
+      button.style.display = display;
+    },
+    updateDragState: function(isDragging) {
+      const form = document.querySelector("#dropzone");
+      form.classList.toggle("is-dragover", isDragging);
+    },
+    clearReport: function() {
+      document.getElementById("report").textContent = "";
+    },
+    addFlag: function(className, markup) {
+      const tempNode = document.createElement("p");
+      tempNode.className = `flag ${className}`;
+      tempNode.innerHTML = markup;
+      document.getElementById("report").appendChild(tempNode);
     }
+  };
+
+  // Core functionalities
+  const fileOps = {
+    processStart: function(e) {
+      ui.showFiles(e.target.files);
+    },
+    submitStart: function(e) {
+      e.preventDefault();
+      this.processFiles(e.target.form.querySelector('input[type="file"]').files);
+    },
+    fileDrop: function(e) {
+      e.preventDefault();
+      const droppedFiles = e.dataTransfer.files;
+      ui.toggleButtonDisplay("none");
+      ui.showFiles(droppedFiles);
+      this.processFiles(droppedFiles);
+    },
+    processFiles: function(files) {
+      ui.clearReport();
+      this.readMultiFiles(files);
+    },
+    readMultiFiles: function(files) {
+      const reader = new FileReader();
+
+      const readFile = (index) => {
+        if (index >= files.length) return;
+        const file = files[index];
+
+        reader.onload = (e) => {
+          this.runCheck(file, e.target.result, index + 1);
+          readFile(index + 1);
+        };
+        reader.readAsText(file);
+      };
+      readFile(0);
+    },
+    runCheck: function(file, fileData, fileNumber) {
+      // Placeholder for actual check functions
+      // Example: validatePDF(fileData), findTags(fileData), etc.
+      var valid;
+
+      buildHeading(file, fileNumber);
+      valid = validatePDF(fileData);
+
+      if (valid === true) {
+        findTitle(fileData);
+        findTags(fileData);
+        findLang(fileData);
+        findMark(fileData);
+        findUA(fileData);
+      }
+    }
+  };
+
+  // Event listeners setup
+  function setupEventListeners() {
+    const form = document.querySelector("#dropzone");
+    const input = form.querySelector('input[type="file"]');
+    const button = form.querySelector('button[type="submit"]');
+
+    input.addEventListener("change", fileOps.processStart);
+    button.addEventListener("click", fileOps.submitStart.bind(fileOps));
+
+    if (isAdvancedUpload()) {
+      ["dragover", "dragenter"].forEach(event => {
+        form.addEventListener(event, (e) => {
+          e.preventDefault();
+          ui.updateDragState(true);
+        }, false);
+      });
+
+      ["dragleave", "dragend", "drop"].forEach(event => {
+        form.addEventListener(event, (e) => {
+          e.preventDefault();
+          ui.updateDragState(false);
+        }, false);
+      });
+
+      form.addEventListener("drop", fileOps.fileDrop.bind(fileOps));
+    }
+
+    // Firefox focus bug fix for file input
+    input.addEventListener("focus", () => input.classList.add("has-focus"));
+    input.addEventListener("blur", () => input.classList.remove("has-focus"));
   }
 
-  function addFlag(className, markup) {
-    var tempNode = document.createElement("p");
-
-    tempNode.className = "flag " + className;
-    tempNode.innerHTML = markup;
-    document.getElementById("report").appendChild(tempNode);
+  // Utility function to check for advanced upload features
+  function isAdvancedUpload() {
+    const div = document.createElement("div");
+    return (("draggable" in div) || ("ondragstart" in div && "ondrop" in div)) &&
+            "FormData" in window && "FileReader" in window;
   }
+
+  // Initial setup call
+  setupEventListeners();
 
   // Check if valid PDF file (read first 8 bytes, match regex)
   function validatePDF(fileData) {
@@ -228,54 +271,11 @@
     addFlag("title", markup);
   }
 
-  function runCheck(file, fileData, fileNumber) {
-    var valid;
+  function addFlag(className, markup) {
+    var tempNode = document.createElement("p");
 
-    buildHeading(file, fileNumber);
-    valid = validatePDF(fileData);
-
-    if (valid === true) {
-      findTitle(fileData);
-      findTags(fileData);
-      findLang(fileData);
-      findMark(fileData);
-      findUA(fileData);
-    }
-  }
-
-  function readMultiFiles(files) {
-    var reader = new FileReader();
-
-    function readFile(index) {
-      var file;
-
-      if (index >= files.length) {
-        return;
-      }
-      file = files[index];
-      reader.onload = function onload(e) {
-        var fileData = e.target.result;
-
-        runCheck(file, fileData, index + 1);
-        readFile(index + 1);
-      };
-      reader.readAsText(file);
-    }
-    readFile(0);
-  }
-
-  function processFiles(files) {
-    document.getElementById("report").text = "";
-    readMultiFiles(files);
-  }
-
-  function isAdvancedUpload() {
-    var div = document.createElement("div");
-
-    return (
-      ("draggable" in div || ("ondragstart" in div && "ondrop" in div)) &&
-      "FormData" in window &&
-      "FileReader" in window
-    );
+    tempNode.className = "flag " + className;
+    tempNode.innerHTML = markup;
+    document.getElementById("report").appendChild(tempNode);
   }
 })();
