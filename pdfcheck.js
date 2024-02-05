@@ -237,20 +237,19 @@
 
   // Build file heading - ex: 1. document.pdf [PDF - 236 KB]
   function buildHeading(file, fileNumber) {
-    var fileLabel,
-      markup,
-      fileExt = file.name.split(".").pop().toUpperCase(),
-      fileSize = file.size / 1024 / 1024,
-      fileSizeSuffix = " MB";
+    const fileExt = file.name.split(".").pop().toUpperCase();
+    let fileSize = file.size / 1024; // KB as default unit
+    let fileSizeSuffix = "KB";
 
-    fileSize = Number(fileSize.toFixed(1));
-    if (fileSize <= 1) {
-      fileSize = Math.ceil(file.size / 1024);
-      fileSizeSuffix = " KB";
+    if (fileSize > 1024) {
+        fileSize = fileSize / 1024; // Convert KB to MB
+        fileSizeSuffix = "MB";
     }
-    fileLabel = "[" + fileExt + " - " + fileSize + fileSizeSuffix + "]";
-    markup =
-      fileNumber + ". " + file.name + " <small>" + fileLabel + "</small>";
+
+    fileSize = fileSizeSuffix === "MB" ? fileSize.toFixed(1) : Math.ceil(fileSize);
+
+    const fileLabel = `[${fileExt} - ${fileSize}${fileSizeSuffix}]`;
+    const markup = `${fileNumber}. ${file.name} <small>${fileLabel}</small>`;
     ui.addFlag("title", markup);
   }
 })();
