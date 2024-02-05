@@ -63,9 +63,7 @@
       readFile(0);
     },
     runCheck: function(file, fileData, fileNumber) {
-      // Placeholder for actual check functions
-      // Example: validatePDF(fileData), findTags(fileData), etc.
-      var valid;
+      let valid;
 
       buildHeading(file, fileNumber);
       valid = validatePDF(fileData);
