@@ -124,21 +124,21 @@
 
   // Check if valid PDF file (read first 8 bytes, match regex)
   function validatePDF(fileData) {
-    var markup,
-      dataHeader = fileData.substr(0, 8),
-      regexHeader = /%PDF-(1.[0-7])/g,
-      matchHeader = regexHeader.exec(dataHeader);
+    // Match PDF version from PDF-1.0 through PDF-3.9
+    const regexHeader = /%PDF-(1\.[0-9]|2\.[0-9]|3\.[0-9])/;
+    const dataHeader = fileData.substr(0, 8);
+    const matchHeader = regexHeader.exec(dataHeader);
 
+    // If no match is found, report the file as invalid
     if (!matchHeader) {
-      markup = "<strong>Not a valid PDF file</strong>";
+      const markup = "<strong>Not a valid PDF file</strong>";
       ui.addFlag("default", markup);
-
       return false;
     }
-    markup =
-      "<span>PDF Version:</span> <strong>" + matchHeader[1] + "</strong>";
-    ui.addFlag("default", markup);
 
+    // If a match is found, report the PDF version number
+    const markup = `<span>PDF Version:</span> <strong>${matchHeader[1]}</strong>`;
+    ui.addFlag("default", markup);
     return true;
   }
 
