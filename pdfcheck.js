@@ -161,47 +161,45 @@
 
   // Check if Lang is set, display value if set
   function findLang(fileData) {
-    var markup,
-      regexLang = /Lang((<|\()\S*(>|\)))/g,
-      matchLang = regexLang.exec(fileData);
+    const regexLang = /Lang(?:<|\()(.*?)(?:>|\))/;
+    const matchLang = regexLang.exec(fileData);
 
-    if (matchLang) {
-      // Handle hex encoding
-      if (matchLang[1] === "<656E2D5553>") {
-        matchLang[1] = "(en-US)";
-      }
-      markup =
-        '<span>Language <a href="#help-language" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>' +
-        matchLang[1] +
-        "</strong>";
-      ui.addFlag("success", markup);
+    let markup;
+    if (matchLang && matchLang[1]) {
+        let languageCode = matchLang[1];
+
+        // Check and decode hex string format for language code
+        if (/^[\da-fA-F]+$/.test(languageCode)) {
+            languageCode = decodeHex(languageCode);
+        }
+
+        markup = `<span>Language <a href="#help-language" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>${languageCode}</strong>`;
+        ui.addFlag("success", markup);
     } else {
-      markup =
-        '<span>Language <a href="#help-language" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>not set</strong>';
-      ui.addFlag("failure", markup);
+        markup = '<span>Language <a href="#help-language" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>not set</strong>';
+        ui.addFlag("failure", markup);
     }
+  }
+
+  // Helper function to decode hex string to ASCII
+  function decodeHex(hexString) {
+    const hexCodePairs = hexString.match(/.{1,2}/g);
+    return hexCodePairs.map(pair => String.fromCharCode(parseInt(pair, 16))).join('');
   }
 
   // Check MarkInfo exists and whether true or false
   function findMark(fileData) {
-    var markup,
-      regexMarked = /<<\/Marked (true|false)/g,
-      matchMarked = regexMarked.exec(fileData);
+    const regexMarked = /<<\/Marked (true|false)/;
+    const matchMarked = regexMarked.exec(fileData);
 
+    let markup;
     if (matchMarked) {
-      if (matchMarked[1] === "true") {
-        markup =
-          '<span>Marked <a href="#help-marked" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>True</strong>';
-        ui.addFlag("success", markup);
-      } else {
-        markup =
-          '<span>Marked <a href="#help-marked" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>False</strong>';
-        ui.addFlag("warning", markup);
-      }
+        const isMarked = matchMarked[1] === "true";
+        markup = `<span>Marked <a href="#help-marked" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>${isMarked ? 'True' : 'False'}</strong>`;
+        ui.addFlag(isMarked ? "success" : "warning", markup);
     } else {
-      markup =
-        '<span>Marked <a href="#help-marked" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>No</strong>';
-      ui.addFlag("failure", markup);
+        markup = '<span>Marked <a href="#help-marked" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>No</strong>';
+        ui.addFlag("failure", markup);
     }
   }
 
