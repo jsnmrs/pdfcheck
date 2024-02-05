@@ -205,18 +205,16 @@
 
   // Check for PDF/UA identifier
   function findUA(fileData) {
-    var markup,
-      regexPDFUA = /<pdfaSchema:prefix>pdfuaid<\/pdfaSchema:prefix>/g,
-      matchPDFUA = regexPDFUA.exec(fileData);
+    const regexPDFUA = /<pdfaSchema:prefix>pdfuaid<\/pdfaSchema:prefix>/;
+    const matchPDFUA = regexPDFUA.exec(fileData);
 
+    let markup;
     if (matchPDFUA) {
-      markup =
-        '<span>PDF/UA identifier <a href="#help-pdfua" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Yes</strong>';
-      ui.addFlag("success", markup);
+        markup = `<span>PDF/UA identifier <a href="#help-pdfua" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Yes</strong>`;
+        ui.addFlag("success", markup);
     } else {
-      markup =
-        '<span>PDF/UA identifier <a href="#help-pdfua" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>';
-      ui.addFlag("warning", markup);
+        markup = `<span>PDF/UA identifier <a href="#help-pdfua" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>`;
+        ui.addFlag("warning", markup);
     }
   }
 
