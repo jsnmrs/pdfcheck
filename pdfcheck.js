@@ -124,6 +124,7 @@
 
   // Check if valid PDF file (read first 8 bytes, match regex)
   function validatePDF(fileData) {
+
     // Match PDF version from PDF-1.0 through PDF-3.9
     const regexHeader = /%PDF-(1\.[0-9]|2\.[0-9]|3\.[0-9])/;
     const dataHeader = fileData.substr(0, 8);
@@ -135,7 +136,6 @@
       ui.addFlag("default", markup);
       return false;
     }
-
     // If a match is found, report the PDF version number
     const markup = `<span>PDF Version:</span> <strong>${matchHeader[1]}</strong>`;
     ui.addFlag("default", markup);
@@ -144,19 +144,17 @@
 
   // Check if StructTreeRoot is set and count tags
   function findTags(fileData) {
-    var markup,
-      regexTree = /StructTreeRoot\s(\d*)\s(\d*)/g,
-      matchTree = regexTree.exec(fileData);
+    const regexTree = /StructTreeRoot\s(\d*)\s(\d*)/;
+    const matchTree = regexTree.exec(fileData);
+    let markup;
 
     if (matchTree) {
-      markup =
-        '<span>Tagged <a href="#help-tagged" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Yes (' +
-        matchTree[1] +
-        " tags)</strong>";
+      // If a match is found, indicate that the document is tagged and show the number of tags
+      markup = `<span>Tagged <a href="#help-tagged" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Yes (${matchTree[1]} tags)</strong>`;
       ui.addFlag("success", markup);
     } else {
-      markup =
-        '<span>Tagged <a href="#help-tagged" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>No</strong>';
+      // If no match is found, indicate that the document is not tagged
+      markup = '<span>Tagged <a href="#help-tagged" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>No</strong>';
       ui.addFlag("failure", markup);
     }
   }
