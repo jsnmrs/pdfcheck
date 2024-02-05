@@ -220,31 +220,20 @@
 
   // Check for DisplayDocTitle and dc:title
   function findTitle(fileData) {
-    var markup,
-      regexTitle =
-        /<dc:title>[\s\S]*?<rdf:Alt>([\s\S]*?)<\/rdf:Alt>[\s\S]*?<\/dc:title>/g,
-      matchTitle = regexTitle.exec(fileData),
-      emptyTag = /<rdf:li xml:lang="x-default"\/>/g,
-      matchEmpty = emptyTag.exec(matchTitle);
+    const regexTitle = /<dc:title>[\s\S]*?<rdf:Alt>([\s\S]*?)<\/rdf:Alt>[\s\S]*?<\/dc:title>/;
+    const matchTitle = regexTitle.exec(fileData);
 
-    if (matchTitle) {
-      if (matchEmpty) {
-        markup =
-          '<span>Document Title <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Empty</strong>';
-        ui.addFlag("warning", markup);
-      } else {
-        markup =
-          '<span>Document Title <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>' +
-          matchTitle[1] +
-          "</strong>";
-        ui.addFlag("default", markup);
-      }
+    let markup;
+    if (matchTitle && matchTitle[1].trim()) {
+        const isNotEmptyTag = !/<rdf:li xml:lang="x-default"\/>/.test(matchTitle[1]);
+        markup = `<span>Document Title <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>${isNotEmptyTag ? matchTitle[1].trim() : 'Empty'}</strong>`;
+        ui.addFlag(isNotEmptyTag ? "default" : "warning", markup);
     } else {
-      markup =
-        '<span>Document Title <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>';
-      ui.addFlag("failure", markup);
+        markup = '<span>Document Title <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>';
+        ui.addFlag("failure", markup);
     }
   }
+
 
   // Build file heading - ex: 1. document.pdf [PDF - 236 KB]
   function buildHeading(file, fileNumber) {
