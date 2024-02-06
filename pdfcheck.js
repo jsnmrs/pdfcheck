@@ -75,9 +75,9 @@
       valid = validatePDF(fileData);
 
       if (valid === true) {
-        findTitle(fileData);
         findCreatorTool(fileData);
         findProducer(fileData);
+        findTitle(fileData);
         findTags(fileData);
         findLang(fileData);
         findMark(fileData);
@@ -163,11 +163,11 @@
     let markup;
 
     if (matchTree) {
-      markup = `<span>Tagged <a href="#help-tagged" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Yes (${matchTree[1]} tags)</strong>`;
+      markup = `<span><a href="#help-tagged">Tagged</a></span> <strong>Yes (${matchTree[1]} tags)</strong>`;
       ui.addFlag("success", markup);
     } else {
       markup =
-        '<span>Tagged <a href="#help-tagged" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>No</strong>';
+        '<span><a href="#help-tagged">Tagged</a></span> <strong>No</strong>';
       ui.addFlag("failure", markup);
     }
   }
@@ -186,11 +186,11 @@
         languageCode = decodeHex(languageCode);
       }
 
-      markup = `<span>Language <a href="#help-language" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>${languageCode}</strong>`;
+      markup = `<span><a href="#help-language">Language</a></span> <strong>${languageCode}</strong>`;
       ui.addFlag("success", markup);
     } else {
       markup =
-        '<span>Language <a href="#help-language" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>not set</strong>';
+        '<span><a href="#help-language">Language</a></span> <strong>not set</strong>';
       ui.addFlag("failure", markup);
     }
   }
@@ -211,11 +211,11 @@
     let markup;
     if (matchMarked) {
       const isMarked = matchMarked[1] === "true";
-      markup = `<span>Marked <a href="#help-marked" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>${isMarked ? "True" : "False"}</strong>`;
+      markup = `<span><a href="#help-marked">Marked</a></span> <strong>${isMarked ? "True" : "False"}</strong>`;
       ui.addFlag(isMarked ? "success" : "warning", markup);
     } else {
       markup =
-        '<span>Marked <a href="#help-marked" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>No</strong>';
+        '<span><a href="#help-marked">Marked</a></span> <strong>No</strong>';
       ui.addFlag("failure", markup);
     }
   }
@@ -227,10 +227,10 @@
 
     let markup;
     if (matchPDFUA) {
-      markup = `<span>PDF/UA identifier <a href="#help-pdfua" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Yes</strong>`;
+      markup = `<span><a href="#help-pdfua">PDF/UA identifier</a></span> <strong>Yes</strong>`;
       ui.addFlag("success", markup);
     } else {
-      markup = `<span>PDF/UA identifier <a href="#help-pdfua" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>`;
+      markup = `<span><a href="#help-pdfua">PDF/UA identifier</a></span> <strong>Not set</strong>`;
       ui.addFlag("warning", markup);
     }
   }
@@ -246,11 +246,11 @@
       const isNotEmptyTag = !/<rdf:li xml:lang="x-default"\/>/.test(
         matchTitle[1],
       );
-      markup = `<span>Document Title <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>${isNotEmptyTag ? matchTitle[1].trim() : "Empty"}</strong>`;
+      markup = `<span><a href="#help-title"">Document Title</a></span> <strong>${isNotEmptyTag ? matchTitle[1].trim() : "Empty"}</strong>`;
       ui.addFlag(isNotEmptyTag ? "default" : "warning", markup);
     } else {
       markup =
-        '<span>Document Title <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>';
+        '<span><a href="#help-title"">Document Title</a></span> <strong>Not set</strong>';
       ui.addFlag("failure", markup);
     }
   }
@@ -263,11 +263,11 @@
 
     let markup;
     if (matchTitle && matchTitle[1].trim()) {
-      markup = `<span>Creator Tool <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>${matchTitle[1].trim()}</strong>`;
+      markup = `<span>Creator Tool</span> <strong>${matchTitle[1].trim()}</strong>`;
       ui.addFlag("default", markup);
     } else {
       markup =
-        '<span>Creator Tool <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>';
+        '<span>Creator Tool</span> <strong>Not set</strong>';
       ui.addFlag("warning", markup);
     }
   }
@@ -280,11 +280,11 @@
 
       let markup;
       if (matchTitle && matchTitle[1].trim()) {
-        markup = `<span>Producer <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>${matchTitle[1].trim()}</strong>`;
+        markup = `<span>Producer</span> <strong>${matchTitle[1].trim()}</strong>`;
         ui.addFlag("default", markup);
       } else {
         markup =
-          '<span>Producer <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>';
+          '<span>Producer</span> <strong>Not set</strong>';
         ui.addFlag("warning", markup);
       }
     }
