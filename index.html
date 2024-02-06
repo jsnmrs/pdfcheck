@@ -33,14 +33,14 @@
       <p class="flag warning first">Files are only loaded locally and are not transmitted anywhere.</p>
       <h2>PDFcheck checks<span class="more-info" aria-hidden="true">i</span></h2>
       <article>
-        <h3 id="help-tagged">Tagged</h3>
+        <h3 id="help-tagged" tabindex="-1">Tagged</h3>
         <p>This check indicates that tags are present in the document. <strong>If no tags are present, the file is absolutely not 508 compliant.</strong> This check doesn't determine if existing tags are correct.</p>
         <h4>Possible tagged values:</h4>
         <p class="flag success"><span>Tagged</span> <strong>Yes (# tags)</strong></p>
         <p class="flag failure"><span>Tagged</span> <strong>No</strong></p>
       </article>
       <article>
-        <h3 id="help-language">Language</h3>
+        <h3 id="help-language" tabindex="-1">Language</h3>
         <p>All documents should have the language attribute set. Correct values for English documents are  <strong>(en)</strong> or <strong>(en-US)</strong>.</p>
         <p>To set the language in Acrobat Pro DC, go to: File &rarr; Properties &rarr; Advanced tab &rarr; Reading Options &rarr; Language drop down</p>
         <h4>Possible language values:</h4>
@@ -48,7 +48,7 @@
         <p class="flag failure"><span>Language</span> <strong>Not set</strong></p>
       </article>
       <article>
-        <h3 id="help-marked">Marked</h3>
+        <h3 id="help-marked" tabindex="-1">Marked</h3>
         <p>In the <a href="https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/PDF32000_2008.pdf">official ISO PDF-1.7 specification [PDF - 9 MB]</a>, on page 574:</p>
         <blockquote>
           <p>A Tagged PDF document shall also contain a mark information dictionary (see Table 321) with a value of true for the Marked entry.</p>
@@ -60,7 +60,7 @@
         <p class="flag failure"><span>Marked</span> <strong>No</strong></p>
       </article>
       <article>
-        <h3 id="help-pdfua">PDF/UA identifier</h3>
+        <h3 id="help-pdfua" tabindex="-1">PDF/UA identifier</h3>
         <p>This checkpoint isn&rsquo;t a deal breaker. From <a href="https://taggedpdf.com/508-pdf-help-center/pdfua-identifier-missing/">taggedpdf.com</a>:</p>
         <blockquote>
           <p>The PDF/UA ID attests that the PDF is ISO 14289 (PDF/UA) compliant. It should be added as the final remediation step; otherwise you would kind of be fibbing.</p>
@@ -71,7 +71,7 @@
         <p class="flag warning"><span>PDF/UA identifier</span> <strong>Not set</strong></p>
       </article>
       <article>
-        <h3 id="help-title">Document Title</h3>
+        <h3 id="help-title" tabindex="-1">Document Title</h3>
         <p>A compliant PDF will have a readable title specified in File &rarr; Properties.</p>
         <h4>Possible document title values:</h4>
         <p class="flag success"><span>Document Title</span> <strong>Document title</strong></p>
