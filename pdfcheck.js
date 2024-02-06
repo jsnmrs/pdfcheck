@@ -76,6 +76,8 @@
 
       if (valid === true) {
         findTitle(fileData);
+        findCreatorTool(fileData);
+        findProducer(fileData);
         findTags(fileData);
         findLang(fileData);
         findMark(fileData);
@@ -252,6 +254,40 @@
       ui.addFlag("failure", markup);
     }
   }
+
+  // Check for xmp:CreatorTool
+  function findCreatorTool(fileData) {
+    const regexTitle =
+      /<xmp:CreatorTool>([\s\S]*?)<\/xmp:CreatorTool>/;
+    const matchTitle = regexTitle.exec(fileData);
+
+    let markup;
+    if (matchTitle && matchTitle[1].trim()) {
+      markup = `<span>Creator Tool <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>${matchTitle[1].trim()}</strong>`;
+      ui.addFlag("default", markup);
+    } else {
+      markup =
+        '<span>Creator Tool <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>';
+      ui.addFlag("warning", markup);
+    }
+  }
+
+    // Check for pdf:Producer
+    function findProducer(fileData) {
+      const regexTitle =
+        /<pdf:Producer>([\s\S]*?)<\/pdf:Producer>/;
+      const matchTitle = regexTitle.exec(fileData);
+
+      let markup;
+      if (matchTitle && matchTitle[1].trim()) {
+        markup = `<span>Producer <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>${matchTitle[1].trim()}</strong>`;
+        ui.addFlag("default", markup);
+      } else {
+        markup =
+          '<span>Producer <a href="#help-title" class="more-info" aria-label="more information on this check" title="more information on this check">i</a></span> <strong>Not set</strong>';
+        ui.addFlag("warning", markup);
+      }
+    }
 
   // Build file heading - ex: 1. document.pdf [PDF - 236 KB]
   function buildHeading(file, fileNumber) {
