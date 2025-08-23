@@ -121,7 +121,7 @@ PDFcheck is designed as a quick screening tool with the following limitations:
 - Cannot validate alt text quality or appropriateness
 - Does not examine table structure validity
 - Cannot detect issues with form field labels or descriptions
-- Does not replace the neeed for manual testing by a human with PDF accessibility expertise
+- Does not replace the need for manual accessibility testing
 
 ## Technical Architecture
 
