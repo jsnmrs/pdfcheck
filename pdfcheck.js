@@ -91,75 +91,69 @@
     },
     processFiles: function (files) {
       ui.clearReport();
-      
+
       // Filter for PDF files only
-      const pdfFiles = Array.from(files).filter(file => {
-        const isPDF = file.type === 'application/pdf' || 
-                      file.name.toLowerCase().endsWith('.pdf');
-        
+      const pdfFiles = Array.from(files).filter((file) => {
+        const isPDF =
+          file.type === "application/pdf" ||
+          file.name.toLowerCase().endsWith(".pdf");
+
         if (!isPDF) {
-          ui.addFlag('failure', 
-            `<strong>Not a PDF file: ${file.name}</strong>`);
+          ui.addFlag(
+            "failure",
+            `<strong>Not a PDF file: ${file.name}</strong>`,
+          );
         }
         return isPDF;
       });
-      
+
       if (pdfFiles.length > 0) {
         this.readMultiFiles(pdfFiles);
       }
     },
-    readMultiFiles: function (files) {
-      const reader = new FileReader();
+    readFileAsync: function (file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
 
-      const readFile = (index) => {
-        if (index >= files.length) return;
-        const file = files[index];
-        
-        // Double-check file type before reading
-        if (!file.name.toLowerCase().endsWith('.pdf')) {
-          ui.addFlag('failure', `<strong>Skipping non-PDF: ${file.name}</strong>`);
-          readFile(index + 1);
-          return;
-        }
-
-        // Error handler for FileReader
-        reader.onerror = (e) => {
-          console.error("File read error:", e);
-          ui.addFlag("failure", `Error reading file: ${file.name}`);
-          readFile(index + 1); // Continue with next file
-        };
-
-        // Success handler for FileReader
         reader.onload = (e) => {
-          try {
-            // Convert ArrayBuffer to binary string for text-based parsing
-            const arrayBuffer = e.target.result;
-            const bytes = new Uint8Array(arrayBuffer);
-            const binaryString = Array.from(bytes)
-              .map((byte) => String.fromCharCode(byte))
-              .join("");
-            this.runCheck(file, binaryString, index + 1);
-          } catch (error) {
-            console.error("Processing error:", error);
-            ui.addFlag(
-              "failure",
-              `Error processing: ${file.name} - ${error.message}`,
-            );
-          } finally {
-            readFile(index + 1); // Always continue to next file
-          }
+          // Convert ArrayBuffer to binary string for text-based parsing
+          const arrayBuffer = e.target.result;
+          const bytes = new Uint8Array(arrayBuffer);
+          const binaryString = Array.from(bytes)
+            .map((byte) => String.fromCharCode(byte))
+            .join("");
+          resolve(binaryString);
         };
 
-        // Attempt to read the file
-        try {
-          reader.readAsArrayBuffer(file);
-        } catch (error) {
-          console.error("Failed to start file read:", error);
-          ui.addFlag("failure", `Failed to read: ${file.name}`);
-          readFile(index + 1);
+        reader.onerror = () => {
+          reject(new Error(`Failed to read file: ${file.name}`));
+        };
+
+        reader.readAsArrayBuffer(file);
+      });
+    },
+
+    readMultiFiles: async function (files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        // Double-check file type before reading
+        if (!file.name.toLowerCase().endsWith(".pdf")) {
+          ui.addFlag(
+            "failure",
+            `<strong>Skipping non-PDF: ${file.name}</strong>`,
+          );
+          continue;
         }
-      };
-      readFile(0);
+
+        try {
+          const fileData = await this.readFileAsync(file);
+          this.runCheck(file, fileData, i + 1);
+        } catch (error) {
+          console.error("File read error:", error);
+          ui.addFlag("failure", `Error reading file: ${file.name}`);
+        }
+      }
     },
     runCheck: function (file, fileData, fileNumber) {
       let valid;
@@ -441,11 +435,12 @@
   // Check for DisplayDocTitle in ViewerPreferences
   function findDisplayDocTitle(fileData) {
     // Check for ViewerPreferences with DisplayDocTitle setting
-    const regexDisplayTitle = /\/ViewerPreferences[^>]*\/DisplayDocTitle\s+(true|false)/;
+    const regexDisplayTitle =
+      /\/ViewerPreferences[^>]*\/DisplayDocTitle\s+(true|false)/;
     const matchDisplayTitle = regexDisplayTitle.exec(fileData);
-    
+
     if (matchDisplayTitle) {
-      const isEnabled = matchDisplayTitle[1] === 'true';
+      const isEnabled = matchDisplayTitle[1] === "true";
       ui.addFlagWithLink(
         isEnabled ? "success" : "warning",
         "Display Document Title",
@@ -457,9 +452,9 @@
       // Also check for alternative format
       const regexAltFormat = /\/DisplayDocTitle\s+(true|false)/;
       const matchAltFormat = regexAltFormat.exec(fileData);
-      
+
       if (matchAltFormat) {
-        const isEnabled = matchAltFormat[1] === 'true';
+        const isEnabled = matchAltFormat[1] === "true";
         ui.addFlagWithLink(
           isEnabled ? "success" : "warning",
           "Display Document Title",
