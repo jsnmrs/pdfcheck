@@ -101,10 +101,16 @@
         const file = files[index];
 
         reader.onload = (e) => {
-          this.runCheck(file, e.target.result, index + 1);
+          // Convert ArrayBuffer to binary string for text-based parsing
+          const arrayBuffer = e.target.result;
+          const bytes = new Uint8Array(arrayBuffer);
+          const binaryString = Array.from(bytes)
+            .map((byte) => String.fromCharCode(byte))
+            .join("");
+          this.runCheck(file, binaryString, index + 1);
           readFile(index + 1);
         };
-        reader.readAsText(file);
+        reader.readAsArrayBuffer(file);
       };
       readFile(0);
     },
