@@ -100,34 +100,98 @@
         if (index >= files.length) return;
         const file = files[index];
 
-        reader.onload = (e) => {
-          // Convert ArrayBuffer to binary string for text-based parsing
-          const arrayBuffer = e.target.result;
-          const bytes = new Uint8Array(arrayBuffer);
-          const binaryString = Array.from(bytes)
-            .map((byte) => String.fromCharCode(byte))
-            .join("");
-          this.runCheck(file, binaryString, index + 1);
-          readFile(index + 1);
+        // Error handler for FileReader
+        reader.onerror = (e) => {
+          console.error("File read error:", e);
+          ui.addFlag("failure", `Error reading file: ${file.name}`);
+          readFile(index + 1); // Continue with next file
         };
-        reader.readAsArrayBuffer(file);
+
+        // Success handler for FileReader
+        reader.onload = (e) => {
+          try {
+            // Convert ArrayBuffer to binary string for text-based parsing
+            const arrayBuffer = e.target.result;
+            const bytes = new Uint8Array(arrayBuffer);
+            const binaryString = Array.from(bytes)
+              .map((byte) => String.fromCharCode(byte))
+              .join("");
+            this.runCheck(file, binaryString, index + 1);
+          } catch (error) {
+            console.error("Processing error:", error);
+            ui.addFlag(
+              "failure",
+              `Error processing: ${file.name} - ${error.message}`,
+            );
+          } finally {
+            readFile(index + 1); // Always continue to next file
+          }
+        };
+
+        // Attempt to read the file
+        try {
+          reader.readAsArrayBuffer(file);
+        } catch (error) {
+          console.error("Failed to start file read:", error);
+          ui.addFlag("failure", `Failed to read: ${file.name}`);
+          readFile(index + 1);
+        }
       };
       readFile(0);
     },
     runCheck: function (file, fileData, fileNumber) {
       let valid;
 
-      buildHeading(file, fileNumber);
-      valid = validatePDF(fileData);
+      try {
+        buildHeading(file, fileNumber);
+        valid = validatePDF(fileData);
 
-      if (valid === true) {
-        findCreatorTool(fileData);
-        findProducer(fileData);
-        findTitle(fileData);
-        findTags(fileData);
-        findLang(fileData);
-        findMark(fileData);
-        findUA(fileData);
+        if (valid === true) {
+          try {
+            findCreatorTool(fileData);
+          } catch (error) {
+            console.error("Error finding creator tool:", error);
+          }
+
+          try {
+            findProducer(fileData);
+          } catch (error) {
+            console.error("Error finding producer:", error);
+          }
+
+          try {
+            findTitle(fileData);
+          } catch (error) {
+            console.error("Error finding title:", error);
+          }
+
+          try {
+            findTags(fileData);
+          } catch (error) {
+            console.error("Error finding tags:", error);
+          }
+
+          try {
+            findLang(fileData);
+          } catch (error) {
+            console.error("Error finding language:", error);
+          }
+
+          try {
+            findMark(fileData);
+          } catch (error) {
+            console.error("Error finding mark:", error);
+          }
+
+          try {
+            findUA(fileData);
+          } catch (error) {
+            console.error("Error finding UA:", error);
+          }
+        }
+      } catch (error) {
+        console.error("Error during PDF validation:", error);
+        ui.addFlag("failure", `Error validating PDF: ${file.name}`);
       }
     },
   };
