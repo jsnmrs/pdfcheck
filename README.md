@@ -45,18 +45,12 @@ Examines critical document metadata:
 - Verifies PDF/UA compliance markers
 - Validates mark information dictionary settings
 
-## Installation
+## Quick Start
 
-1. Clone the repository:
-```bash
-git clone https://github.com/jsnmrs/pdfcheck.git
-cd pdfcheck
-```
-
-2. Run locally using any static file server. For example:
-```bash
-npx serve
-```
+1. Clone the repository: `git clone https://github.com/jsnmrs/pdfcheck.git && cd pdfcheck`
+2. Serve the files locally: `npx serve`
+3. Open your browser and navigate to `http://localhost:3000`
+4. Upload PDF files using the file picker or drag and drop interface
 
 ## Usage
 
@@ -64,7 +58,6 @@ npx serve
    - Visit `http://localhost:3000` (or your server's address)
    - Use the file upload interface or drag and drop PDFs
    - View instant feedback on the status of each file
-
 2. **Analyzing Files**
    - Upload single or multiple PDF files
    - Results are displayed immediately below the upload area
@@ -72,7 +65,6 @@ npx serve
      - Green: Passing checks
      - Yellow: Warning conditions
      - Red: Failed checks
-
 3. **Understanding Results**
    Each PDF is analyzed for:
    - PDF version
@@ -84,6 +76,63 @@ npx serve
    - Producer information
    - Mark information status
 
+## Examples
+
+### Visual Result States
+
+PDFcheck displays results with color-coded indicators for quick assessment:
+
+- **Success (Green background)**: Indicates the check passed successfully
+  - Tagged: Yes (with tag count)
+  - Language: Set with valid code (e.g., en-US)
+  - Marked: True
+  - PDF/UA identifier: Yes
+
+- **Warning (Yellow background)**: Indicates a potential issue that may need attention
+  - Marked: False
+  - PDF/UA identifier: Not set
+  - Document Title: Empty or Not set
+  - Creator Tool: Not set
+  - Producer: Not set
+
+- **Failure (Red background)**: Indicates a critical accessibility issue
+  - Tagged: No
+  - Language: Not set
+  - Marked: No
+  - Document Title: Not set
+
+- **Default (Gray background)**: Neutral information display
+  - PDF Version display
+  - File information headers
+
+### Batch Processing
+
+The tool can analyze multiple PDFs simultaneously. Select or drag multiple files, and each will be processed and displayed with its individual results, numbered sequentially with file size information.
+
+## Limitations
+
+PDFcheck is designed as a quick screening tool with the following limitations:
+
+- Does not validate the correctness of existing tags (only checks for their presence)
+- Cannot fix accessibility issues (detection only)
+- Does not perform full WCAG compliance validation
+- Uses text-based PDF analysis which may not detect all edge cases
+- Does not check for proper reading order
+- Cannot validate alt text quality or appropriateness
+- Does not examine table structure validity
+- Cannot detect issues with form field labels or descriptions
+- Does not replace the neeed for manual testing by a human with PDF accessibility expertise
+
+## Technical Architecture
+
+PDFcheck is built as a lightweight, client-side application with the following architecture:
+
+- **Pure JavaScript implementation**: No external dependencies or frameworks required
+- **FileReader API**: Enables local file processing without server uploads
+- **Regex-based PDF analysis**: Parses PDF structure to extract accessibility metadata
+- **Privacy-focused**: All processing occurs in the browser with no external data transmission
+- **Modular design**: Separated concerns for UI updates, file operations, and PDF analysis
+
 ## Development
 
 ### Key Components
@@ -92,6 +141,36 @@ npx serve
 - **File Operations**: Manages file reading and processing
 - **PDF Analysis**: Contains specialized functions for PDF property extraction
 - **Event Handling**: Implements drag-and-drop and form submission logic
+
+## Test Files
+
+The `/examples` directory contains sample PDFs for testing various accessibility scenarios:
+
+### Files Without Accessibility Features
+
+- `not-pdf.txt`: Non-PDF file for testing file validation
+- `not-tagged.pdf`: PDF without any structural tags
+- `not-tagged-with-UA.pdf`: Untagged PDF that includes PDF/UA identifier
+- `not-tagged-with-doctitle.pdf`: Untagged PDF with document title set
+- `not-tagged-with-filename.pdf`: Untagged PDF with only filename as title
+- `not-tagged-with-language.pdf`: Untagged PDF with language attribute set
+
+### Files With Accessibility Features
+
+- `tagged-with-UA.pdf`: Properly tagged PDF with PDF/UA compliance
+- `tagged-no-UA.pdf`: Tagged PDF without PDF/UA identifier
+- `tagged-no-UA-with-filename.pdf`: Tagged PDF using filename as title
+- `tagged-PAC2-pass.pdf`: PDF that passes PAC 2 validation
+- `tagged-HTML-headings-PAC-2024-pass.pdf`: Tagged PDF with HTML headings passing PAC 2024
+- `tagged-HTML-headings-chrome.pdf`: PDF with HTML headings created in Chrome
+- `tagged-HTML-headings-chrome-espanol.pdf`: Spanish language PDF with HTML headings from Chrome
+
+### Using Test Files
+
+1. Navigate to the `/examples` directory
+2. Upload individual files or multiple files to test batch processing
+3. Compare results against expected outcomes based on filename descriptions
+4. Use these files to verify the tool is working correctly after updates
 
 ## Security
 
