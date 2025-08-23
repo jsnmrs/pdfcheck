@@ -23,10 +23,50 @@
     clearReport: function () {
       document.getElementById("report").textContent = "";
     },
-    addFlag: function (className, markup) {
+    addFlag: function (className, content, isHTML = false) {
       const tempNode = document.createElement("p");
       tempNode.className = `flag ${className}`;
-      tempNode.innerHTML = markup;
+
+      if (isHTML) {
+        // Parse the HTML string safely
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(content, "text/html");
+        while (doc.body.firstChild) {
+          tempNode.appendChild(doc.body.firstChild);
+        }
+      } else {
+        tempNode.textContent = content;
+      }
+
+      document.getElementById("report").appendChild(tempNode);
+    },
+    addFlagWithLink: function (
+      className,
+      labelText,
+      linkHref,
+      linkText,
+      valueText,
+    ) {
+      const tempNode = document.createElement("p");
+      tempNode.className = `flag ${className}`;
+
+      const span = document.createElement("span");
+      if (linkHref) {
+        const link = document.createElement("a");
+        link.href = linkHref;
+        link.textContent = linkText;
+        span.appendChild(link);
+      } else {
+        span.textContent = labelText;
+      }
+      tempNode.appendChild(span);
+
+      tempNode.appendChild(document.createTextNode(" "));
+
+      const strong = document.createElement("strong");
+      strong.textContent = valueText;
+      tempNode.appendChild(strong);
+
       document.getElementById("report").appendChild(tempNode);
     },
   };
@@ -147,12 +187,16 @@
     const matchHeader = regexHeader.exec(dataHeader);
 
     if (!matchHeader) {
-      const markup = "<strong>Not a valid PDF file</strong>";
-      ui.addFlag("default", markup);
+      ui.addFlagWithLink("default", "", null, "", "Not a valid PDF file");
       return false;
     }
-    const markup = `<span>PDF Version:</span> <strong>${matchHeader[1]}</strong>`;
-    ui.addFlag("default", markup);
+    ui.addFlagWithLink(
+      "default",
+      "PDF Version:",
+      null,
+      "PDF Version:",
+      matchHeader[1],
+    );
     return true;
   }
 
@@ -160,15 +204,17 @@
   function findTags(fileData) {
     const regexTree = /StructTreeRoot\s(\d*)\s(\d*)/;
     const matchTree = regexTree.exec(fileData);
-    let markup;
 
     if (matchTree) {
-      markup = `<span><a href="#help-tagged">Tagged</a></span> <strong>Yes (${matchTree[1]} tags)</strong>`;
-      ui.addFlag("success", markup);
+      ui.addFlagWithLink(
+        "success",
+        "Tagged",
+        "#help-tagged",
+        "Tagged",
+        `Yes (${matchTree[1]} tags)`,
+      );
     } else {
-      markup =
-        '<span><a href="#help-tagged">Tagged</a></span> <strong>No</strong>';
-      ui.addFlag("failure", markup);
+      ui.addFlagWithLink("failure", "Tagged", "#help-tagged", "Tagged", "No");
     }
   }
 
@@ -176,8 +222,6 @@
   function findLang(fileData) {
     const regexLang = /Lang(?:<|\()(.*?)(?:>|\))/;
     const matchLang = regexLang.exec(fileData);
-
-    let markup;
     if (matchLang && matchLang[1]) {
       let languageCode = matchLang[1];
 
@@ -186,12 +230,21 @@
         languageCode = decodeHex(languageCode);
       }
 
-      markup = `<span><a href="#help-language">Language</a></span> <strong>${languageCode}</strong>`;
-      ui.addFlag("success", markup);
+      ui.addFlagWithLink(
+        "success",
+        "Language",
+        "#help-language",
+        "Language",
+        languageCode,
+      );
     } else {
-      markup =
-        '<span><a href="#help-language">Language</a></span> <strong>not set</strong>';
-      ui.addFlag("failure", markup);
+      ui.addFlagWithLink(
+        "failure",
+        "Language",
+        "#help-language",
+        "Language",
+        "not set",
+      );
     }
   }
 
@@ -207,16 +260,17 @@
   function findMark(fileData) {
     const regexMarked = /<<\/Marked (true|false)/;
     const matchMarked = regexMarked.exec(fileData);
-
-    let markup;
     if (matchMarked) {
       const isMarked = matchMarked[1] === "true";
-      markup = `<span><a href="#help-marked">Marked</a></span> <strong>${isMarked ? "True" : "False"}</strong>`;
-      ui.addFlag(isMarked ? "success" : "warning", markup);
+      ui.addFlagWithLink(
+        isMarked ? "success" : "warning",
+        "Marked",
+        "#help-marked",
+        "Marked",
+        isMarked ? "True" : "False",
+      );
     } else {
-      markup =
-        '<span><a href="#help-marked">Marked</a></span> <strong>No</strong>';
-      ui.addFlag("failure", markup);
+      ui.addFlagWithLink("failure", "Marked", "#help-marked", "Marked", "No");
     }
   }
 
@@ -224,14 +278,22 @@
   function findUA(fileData) {
     const regexPDFUA = /<pdfaSchema:prefix>pdfuaid<\/pdfaSchema:prefix>/;
     const matchPDFUA = regexPDFUA.exec(fileData);
-
-    let markup;
     if (matchPDFUA) {
-      markup = `<span><a href="#help-pdfua">PDF/UA identifier</a></span> <strong>Yes</strong>`;
-      ui.addFlag("success", markup);
+      ui.addFlagWithLink(
+        "success",
+        "PDF/UA identifier",
+        "#help-pdfua",
+        "PDF/UA identifier",
+        "Yes",
+      );
     } else {
-      markup = `<span><a href="#help-pdfua">PDF/UA identifier</a></span> <strong>Not set</strong>`;
-      ui.addFlag("warning", markup);
+      ui.addFlagWithLink(
+        "warning",
+        "PDF/UA identifier",
+        "#help-pdfua",
+        "PDF/UA identifier",
+        "Not set",
+      );
     }
   }
 
@@ -240,54 +302,83 @@
     const regexTitle =
       /<dc:title>[\s\S]*?<rdf:Alt>([\s\S]*?)<\/rdf:Alt>[\s\S]*?<\/dc:title>/;
     const matchTitle = regexTitle.exec(fileData);
-
-    let markup;
     if (matchTitle && matchTitle[1].trim()) {
-      const isNotEmptyTag = !/<rdf:li xml:lang="x-default"\/>/.test(
-        matchTitle[1],
-      );
-      markup = `<span><a href="#help-title"">Document Title</a></span> <strong>${isNotEmptyTag ? matchTitle[1].trim() : "Empty"}</strong>`;
-      ui.addFlag(isNotEmptyTag ? "default" : "warning", markup);
+      // Check if it's an empty self-closing tag
+      const isEmptyTag = /<rdf:li xml:lang="x-default"\/>/.test(matchTitle[1]);
+
+      if (!isEmptyTag) {
+        // Extract the actual title text from within the rdf:li tags
+        const titleRegex = /<rdf:li[^>]*>([^<]*)<\/rdf:li>/;
+        const titleMatch = titleRegex.exec(matchTitle[1]);
+        const titleText = titleMatch
+          ? titleMatch[1].trim()
+          : matchTitle[1].trim();
+        ui.addFlagWithLink(
+          "default",
+          "Document Title",
+          "#help-title",
+          "Document Title",
+          titleText,
+        );
+      } else {
+        ui.addFlagWithLink(
+          "warning",
+          "Document Title",
+          "#help-title",
+          "Document Title",
+          "Empty",
+        );
+      }
     } else {
-      markup =
-        '<span><a href="#help-title"">Document Title</a></span> <strong>Not set</strong>';
-      ui.addFlag("failure", markup);
+      ui.addFlagWithLink(
+        "failure",
+        "Document Title",
+        "#help-title",
+        "Document Title",
+        "Not set",
+      );
     }
   }
 
   // Check for xmp:CreatorTool
   function findCreatorTool(fileData) {
-    const regexTitle =
-      /<xmp:CreatorTool>([\s\S]*?)<\/xmp:CreatorTool>/;
+    const regexTitle = /<xmp:CreatorTool>([\s\S]*?)<\/xmp:CreatorTool>/;
     const matchTitle = regexTitle.exec(fileData);
-
-    let markup;
     if (matchTitle && matchTitle[1].trim()) {
-      markup = `<span>Creator Tool</span> <strong>${matchTitle[1].trim()}</strong>`;
-      ui.addFlag("default", markup);
+      ui.addFlagWithLink(
+        "default",
+        "Creator Tool",
+        null,
+        "Creator Tool",
+        matchTitle[1].trim(),
+      );
     } else {
-      markup =
-        '<span>Creator Tool</span> <strong>Not set</strong>';
-      ui.addFlag("warning", markup);
+      ui.addFlagWithLink(
+        "warning",
+        "Creator Tool",
+        null,
+        "Creator Tool",
+        "Not set",
+      );
     }
   }
 
-    // Check for pdf:Producer
-    function findProducer(fileData) {
-      const regexTitle =
-        /<pdf:Producer>([\s\S]*?)<\/pdf:Producer>/;
-      const matchTitle = regexTitle.exec(fileData);
-
-      let markup;
-      if (matchTitle && matchTitle[1].trim()) {
-        markup = `<span>Producer</span> <strong>${matchTitle[1].trim()}</strong>`;
-        ui.addFlag("default", markup);
-      } else {
-        markup =
-          '<span>Producer</span> <strong>Not set</strong>';
-        ui.addFlag("warning", markup);
-      }
+  // Check for pdf:Producer
+  function findProducer(fileData) {
+    const regexTitle = /<pdf:Producer>([\s\S]*?)<\/pdf:Producer>/;
+    const matchTitle = regexTitle.exec(fileData);
+    if (matchTitle && matchTitle[1].trim()) {
+      ui.addFlagWithLink(
+        "default",
+        "Producer",
+        null,
+        "Producer",
+        matchTitle[1].trim(),
+      );
+    } else {
+      ui.addFlagWithLink("warning", "Producer", null, "Producer", "Not set");
     }
+  }
 
   // Build file heading - ex: 1. document.pdf [PDF - 236 KB]
   function buildHeading(file, fileNumber) {
@@ -304,7 +395,18 @@
       fileSizeSuffix === "MB" ? fileSize.toFixed(1) : Math.ceil(fileSize);
 
     const fileLabel = `[${fileExt} - ${fileSize}${fileSizeSuffix}]`;
-    const markup = `${fileNumber}. ${file.name} <small>${fileLabel}</small>`;
-    ui.addFlag("title", markup);
+
+    // Create the heading safely
+    const tempNode = document.createElement("p");
+    tempNode.className = "flag title";
+    tempNode.appendChild(
+      document.createTextNode(`${fileNumber}. ${file.name} `),
+    );
+
+    const small = document.createElement("small");
+    small.textContent = fileLabel;
+    tempNode.appendChild(small);
+
+    document.getElementById("report").appendChild(tempNode);
   }
 })();
