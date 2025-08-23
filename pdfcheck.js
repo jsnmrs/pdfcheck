@@ -166,6 +166,12 @@
           }
 
           try {
+            findDisplayDocTitle(fileData);
+          } catch (error) {
+            console.error("Error finding display doc title:", error);
+          }
+
+          try {
             findTags(fileData);
           } catch (error) {
             console.error("Error finding tags:", error);
@@ -407,6 +413,47 @@
         "Document Title",
         "Not set",
       );
+    }
+  }
+
+  // Check for DisplayDocTitle in ViewerPreferences
+  function findDisplayDocTitle(fileData) {
+    // Check for ViewerPreferences with DisplayDocTitle setting
+    const regexDisplayTitle = /\/ViewerPreferences[^>]*\/DisplayDocTitle\s+(true|false)/;
+    const matchDisplayTitle = regexDisplayTitle.exec(fileData);
+    
+    if (matchDisplayTitle) {
+      const isEnabled = matchDisplayTitle[1] === 'true';
+      ui.addFlagWithLink(
+        isEnabled ? "success" : "warning",
+        "Display Document Title",
+        "#help-display-title",
+        "Display Document Title",
+        isEnabled ? "Enabled" : "Disabled",
+      );
+    } else {
+      // Also check for alternative format
+      const regexAltFormat = /\/DisplayDocTitle\s+(true|false)/;
+      const matchAltFormat = regexAltFormat.exec(fileData);
+      
+      if (matchAltFormat) {
+        const isEnabled = matchAltFormat[1] === 'true';
+        ui.addFlagWithLink(
+          isEnabled ? "success" : "warning",
+          "Display Document Title",
+          "#help-display-title",
+          "Display Document Title",
+          isEnabled ? "Enabled" : "Disabled",
+        );
+      } else {
+        ui.addFlagWithLink(
+          "warning",
+          "Display Document Title",
+          "#help-display-title",
+          "Display Document Title",
+          "Not configured",
+        );
+      }
     }
   }
 
