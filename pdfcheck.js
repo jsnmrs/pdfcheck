@@ -91,7 +91,22 @@
     },
     processFiles: function (files) {
       ui.clearReport();
-      this.readMultiFiles(files);
+      
+      // Filter for PDF files only
+      const pdfFiles = Array.from(files).filter(file => {
+        const isPDF = file.type === 'application/pdf' || 
+                      file.name.toLowerCase().endsWith('.pdf');
+        
+        if (!isPDF) {
+          ui.addFlag('failure', 
+            `<strong>Not a PDF file: ${file.name}</strong>`);
+        }
+        return isPDF;
+      });
+      
+      if (pdfFiles.length > 0) {
+        this.readMultiFiles(pdfFiles);
+      }
     },
     readMultiFiles: function (files) {
       const reader = new FileReader();
@@ -99,6 +114,13 @@
       const readFile = (index) => {
         if (index >= files.length) return;
         const file = files[index];
+        
+        // Double-check file type before reading
+        if (!file.name.toLowerCase().endsWith('.pdf')) {
+          ui.addFlag('failure', `<strong>Skipping non-PDF: ${file.name}</strong>`);
+          readFile(index + 1);
+          return;
+        }
 
         // Error handler for FileReader
         reader.onerror = (e) => {
