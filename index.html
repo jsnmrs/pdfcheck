@@ -256,12 +256,13 @@
             <input type="file" name="files[]" id="file" class="upload-input" data-multiple-caption="{count} files" accept=".pdf,application/pdf" multiple />
             <p class="submit"><button type="submit">Check files</button></p>
           </form>
-          <div id="report" role="region" aria-live="polite" aria-label="PDFcheck results"></div>
+          <output for="dropzone" name="Results" id="report"></output>
           <div class="visually-hidden" role="status" aria-atomic="true" id="announce"></div>
         </section>
         <section class="help" aria-labelledby="checks">
           <p class="flag warning first">Files are only loaded locally and are not transmitted anywhere.</p>
-          <h2 id="checks" tabindex="-1">PDFcheck checks</h2>
+          <h2 id="checks" tabindex="-1">Checks and example output</h2>
+          <p><span id="learn">Learn more about </span>the checks and results.</section>
           <article>
             <h3 id="help-tagged" tabindex="-1">Tagged</h3>
             <p>
