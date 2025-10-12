@@ -1,15 +1,19 @@
 (function pdfCheck() {
   // Utility functions for UI updates and event handling
   const ui = {
+    announceStatus: function (message) {
+      const announcer = document.getElementById("announce");
+      if (announcer) {
+        announcer.textContent = message;
+        setTimeout(() => {
+          announcer.textContent = "";
+        }, 2000); // Clear announce region after 2 seconds
+      }
+    },
     showFiles: function (files) {
       const label = document.querySelector("#dropzone label");
       const fileName =
-        files.length > 1
-          ? document
-              .querySelector('input[type="file"]')
-              .getAttribute("data-multiple-caption")
-              .replace("{count}", files.length)
-          : files[0].name;
+        files.length > 1 ? document.querySelector('input[type="file"]').getAttribute("data-multiple-caption").replace("{count}", files.length) : files[0].name;
       label.textContent = fileName;
     },
     toggleButtonDisplay: function (display = "none") {
@@ -40,13 +44,7 @@
 
       document.getElementById("report").appendChild(tempNode);
     },
-    addFlagWithLink: function (
-      className,
-      labelText,
-      linkHref,
-      linkText,
-      valueText,
-    ) {
+    addFlagWithLink: function (className, labelText, linkHref, linkText, valueText) {
       const tempNode = document.createElement("p");
       tempNode.className = `flag ${className}`;
 
@@ -78,9 +76,7 @@
     },
     submitStart: function (e) {
       e.preventDefault();
-      this.processFiles(
-        e.target.form.querySelector('input[type="file"]').files,
-      );
+      this.processFiles(e.target.form.querySelector('input[type="file"]').files);
     },
     fileDrop: function (e) {
       e.preventDefault();
@@ -94,20 +90,18 @@
 
       // Filter for PDF files only
       const pdfFiles = Array.from(files).filter((file) => {
-        const isPDF =
-          file.type === "application/pdf" ||
-          file.name.toLowerCase().endsWith(".pdf");
+        const isPDF = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
 
         if (!isPDF) {
-          ui.addFlag(
-            "failure",
-            `<strong>Not a PDF file: ${file.name}</strong>`,
-          );
+          ui.addFlag("failure", `<strong>Not a PDF file: ${file.name}</strong>`);
         }
         return isPDF;
       });
 
       if (pdfFiles.length > 0) {
+        const fileCount = pdfFiles.length;
+        const pluralFiles = fileCount === 1 ? "file" : "files";
+        ui.announceStatus(`Running checks on ${fileCount} ${pluralFiles}`);
         this.readMultiFiles(pdfFiles);
       }
     },
@@ -139,19 +133,18 @@
 
         // Double-check file type before reading
         if (!file.name.toLowerCase().endsWith(".pdf")) {
-          ui.addFlag(
-            "failure",
-            `<strong>Skipping non-PDF: ${file.name}</strong>`,
-          );
+          ui.addFlag("failure", `<strong>Skipping non-PDF: ${file.name}</strong>`);
           continue;
         }
 
         try {
           const fileData = await this.readFileAsync(file);
           this.runCheck(file, fileData, i + 1);
+          ui.announceStatus(`Completed checking ${file.name}`);
         } catch (error) {
           console.error("File read error:", error);
           ui.addFlag("failure", `Error reading file: ${file.name}`);
+          ui.announceStatus(`Error reading file: ${file.name}`);
         }
       }
     },
@@ -261,11 +254,7 @@
   // Utility function to check for advanced upload features
   function isAdvancedUpload() {
     const div = document.createElement("div");
-    return (
-      ("draggable" in div || ("ondragstart" in div && "ondrop" in div)) &&
-      "FormData" in window &&
-      "FileReader" in window
-    );
+    return ("draggable" in div || ("ondragstart" in div && "ondrop" in div)) && "FormData" in window && "FileReader" in window;
   }
 
   // Initial setup call
@@ -282,13 +271,7 @@
       ui.addFlagWithLink("default", "", null, "", "Not a valid PDF file");
       return false;
     }
-    ui.addFlagWithLink(
-      "default",
-      "PDF Version:",
-      null,
-      "PDF Version:",
-      matchHeader[1],
-    );
+    ui.addFlagWithLink("default", "PDF Version:", null, "PDF Version:", matchHeader[1]);
     return true;
   }
 
@@ -298,13 +281,7 @@
     const matchTree = regexTree.exec(fileData);
 
     if (matchTree) {
-      ui.addFlagWithLink(
-        "success",
-        "Tagged",
-        "#help-tagged",
-        "Tagged",
-        `Yes (${matchTree[1]} tags)`,
-      );
+      ui.addFlagWithLink("success", "Tagged", "#help-tagged", "Tagged", `Yes (${matchTree[1]} tags)`);
     } else {
       ui.addFlagWithLink("failure", "Tagged", "#help-tagged", "Tagged", "No");
     }
@@ -322,30 +299,16 @@
         languageCode = decodeHex(languageCode);
       }
 
-      ui.addFlagWithLink(
-        "success",
-        "Language",
-        "#help-language",
-        "Language",
-        languageCode,
-      );
+      ui.addFlagWithLink("success", "Language", "#help-language", "Language", languageCode);
     } else {
-      ui.addFlagWithLink(
-        "failure",
-        "Language",
-        "#help-language",
-        "Language",
-        "not set",
-      );
+      ui.addFlagWithLink("failure", "Language", "#help-language", "Language", "not set");
     }
   }
 
   // Helper function to decode hex string to ASCII
   function decodeHex(hexString) {
     const hexCodePairs = hexString.match(/.{1,2}/g);
-    return hexCodePairs
-      .map((pair) => String.fromCharCode(parseInt(pair, 16)))
-      .join("");
+    return hexCodePairs.map((pair) => String.fromCharCode(parseInt(pair, 16))).join("");
   }
 
   // Check MarkInfo exists and whether true or false
@@ -354,13 +317,7 @@
     const matchMarked = regexMarked.exec(fileData);
     if (matchMarked) {
       const isMarked = matchMarked[1] === "true";
-      ui.addFlagWithLink(
-        isMarked ? "success" : "warning",
-        "Marked",
-        "#help-marked",
-        "Marked",
-        isMarked ? "True" : "False",
-      );
+      ui.addFlagWithLink(isMarked ? "success" : "warning", "Marked", "#help-marked", "Marked", isMarked ? "True" : "False");
     } else {
       ui.addFlagWithLink("failure", "Marked", "#help-marked", "Marked", "No");
     }
@@ -371,28 +328,15 @@
     const regexPDFUA = /<pdfaSchema:prefix>pdfuaid<\/pdfaSchema:prefix>/;
     const matchPDFUA = regexPDFUA.exec(fileData);
     if (matchPDFUA) {
-      ui.addFlagWithLink(
-        "success",
-        "PDF/UA identifier",
-        "#help-pdfua",
-        "PDF/UA identifier",
-        "Yes",
-      );
+      ui.addFlagWithLink("success", "PDF/UA identifier", "#help-pdfua", "PDF/UA identifier", "Yes");
     } else {
-      ui.addFlagWithLink(
-        "warning",
-        "PDF/UA identifier",
-        "#help-pdfua",
-        "PDF/UA identifier",
-        "Not set",
-      );
+      ui.addFlagWithLink("warning", "PDF/UA identifier", "#help-pdfua", "PDF/UA identifier", "Not set");
     }
   }
 
   // Check for DisplayDocTitle and dc:title
   function findTitle(fileData) {
-    const regexTitle =
-      /<dc:title>[\s\S]*?<rdf:Alt>([\s\S]*?)<\/rdf:Alt>[\s\S]*?<\/dc:title>/;
+    const regexTitle = /<dc:title>[\s\S]*?<rdf:Alt>([\s\S]*?)<\/rdf:Alt>[\s\S]*?<\/dc:title>/;
     const matchTitle = regexTitle.exec(fileData);
     if (matchTitle && matchTitle[1].trim()) {
       // Check if it's an empty self-closing tag
@@ -402,41 +346,20 @@
         // Extract the actual title text from within the rdf:li tags
         const titleRegex = /<rdf:li[^>]*>([^<]*)<\/rdf:li>/;
         const titleMatch = titleRegex.exec(matchTitle[1]);
-        const titleText = titleMatch
-          ? titleMatch[1].trim()
-          : matchTitle[1].trim();
-        ui.addFlagWithLink(
-          "default",
-          "Document Title",
-          "#help-title",
-          "Document Title",
-          titleText,
-        );
+        const titleText = titleMatch ? titleMatch[1].trim() : matchTitle[1].trim();
+        ui.addFlagWithLink("default", "Document Title", "#help-title", "Document Title", titleText);
       } else {
-        ui.addFlagWithLink(
-          "warning",
-          "Document Title",
-          "#help-title",
-          "Document Title",
-          "Empty",
-        );
+        ui.addFlagWithLink("warning", "Document Title", "#help-title", "Document Title", "Empty");
       }
     } else {
-      ui.addFlagWithLink(
-        "failure",
-        "Document Title",
-        "#help-title",
-        "Document Title",
-        "Not set",
-      );
+      ui.addFlagWithLink("failure", "Document Title", "#help-title", "Document Title", "Not set");
     }
   }
 
   // Check for DisplayDocTitle in ViewerPreferences
   function findDisplayDocTitle(fileData) {
     // Check for ViewerPreferences with DisplayDocTitle setting
-    const regexDisplayTitle =
-      /\/ViewerPreferences[^>]*\/DisplayDocTitle\s+(true|false)/;
+    const regexDisplayTitle = /\/ViewerPreferences[^>]*\/DisplayDocTitle\s+(true|false)/;
     const matchDisplayTitle = regexDisplayTitle.exec(fileData);
 
     if (matchDisplayTitle) {
@@ -463,13 +386,7 @@
           isEnabled ? "Enabled" : "Disabled",
         );
       } else {
-        ui.addFlagWithLink(
-          "warning",
-          "Display Document Title",
-          "#help-display-title",
-          "Display Document Title",
-          "Not configured",
-        );
+        ui.addFlagWithLink("warning", "Display Document Title", "#help-display-title", "Display Document Title", "Not configured");
       }
     }
   }
@@ -479,21 +396,9 @@
     const regexTitle = /<xmp:CreatorTool>([\s\S]*?)<\/xmp:CreatorTool>/;
     const matchTitle = regexTitle.exec(fileData);
     if (matchTitle && matchTitle[1].trim()) {
-      ui.addFlagWithLink(
-        "default",
-        "Creator Tool",
-        null,
-        "Creator Tool",
-        matchTitle[1].trim(),
-      );
+      ui.addFlagWithLink("default", "Creator Tool", null, "Creator Tool", matchTitle[1].trim());
     } else {
-      ui.addFlagWithLink(
-        "warning",
-        "Creator Tool",
-        null,
-        "Creator Tool",
-        "Not set",
-      );
+      ui.addFlagWithLink("warning", "Creator Tool", null, "Creator Tool", "Not set");
     }
   }
 
@@ -502,13 +407,7 @@
     const regexTitle = /<pdf:Producer>([\s\S]*?)<\/pdf:Producer>/;
     const matchTitle = regexTitle.exec(fileData);
     if (matchTitle && matchTitle[1].trim()) {
-      ui.addFlagWithLink(
-        "default",
-        "Producer",
-        null,
-        "Producer",
-        matchTitle[1].trim(),
-      );
+      ui.addFlagWithLink("default", "Producer", null, "Producer", matchTitle[1].trim());
     } else {
       ui.addFlagWithLink("warning", "Producer", null, "Producer", "Not set");
     }
@@ -525,17 +424,14 @@
       fileSizeSuffix = "MB";
     }
 
-    fileSize =
-      fileSizeSuffix === "MB" ? fileSize.toFixed(1) : Math.ceil(fileSize);
+    fileSize = fileSizeSuffix === "MB" ? fileSize.toFixed(1) : Math.ceil(fileSize);
 
     const fileLabel = `[${fileExt} - ${fileSize}${fileSizeSuffix}]`;
 
     // Create the heading safely
     const tempNode = document.createElement("p");
     tempNode.className = "flag title";
-    tempNode.appendChild(
-      document.createTextNode(`${fileNumber}. ${file.name} `),
-    );
+    tempNode.appendChild(document.createTextNode(`${fileNumber}. ${file.name} `));
 
     const small = document.createElement("small");
     small.textContent = fileLabel;
