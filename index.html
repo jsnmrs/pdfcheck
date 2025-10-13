@@ -253,7 +253,8 @@
         </div>
       </div>
       <div class="wrap">
-        <section aria-label="Check files">
+        <section aria-labelledby="checks">
+          <h2 class="visually-hidden" id="checks">Check PDFs</h2>
           <form class="box" id="dropzone">
             <svg
               aria-hidden="true"
@@ -282,7 +283,14 @@
             />
             <p class="submit"><button type="submit">Check files</button></p>
           </form>
-          <output for="dropzone" name="Results" id="report"></output>
+          <h2 class="visually-hidden" id="results">Results</h2>
+          <output
+            for="dropzone"
+            name="report"
+            id="report"
+            aria-labelledby="results"
+            role="region"
+          ></output>
           <div
             class="visually-hidden"
             role="status"
@@ -290,14 +298,12 @@
             id="announce"
           ></div>
         </section>
-        <section class="help" aria-labelledby="checks">
+        <section class="help" aria-labelledby="tests">
           <p class="flag warning first">
             Files are only loaded locally and are not transmitted anywhere.
           </p>
-          <h2 id="checks" tabindex="-1">Checks and example output</h2>
-          <p>
-            <span id="learn">Learn more about </span>the checks and results.
-          </p>
+          <h2 id="tests" tabindex="-1">Tests and example output</h2>
+          <p><span id="learn">Learn more about </span>the tests and results.</p>
           <article>
             <h3 id="help-tagged" tabindex="-1">Tagged</h3>
             <p>
