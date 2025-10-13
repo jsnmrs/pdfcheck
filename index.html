@@ -10,6 +10,19 @@
       content="Immediately check one or more PDF files for signs of inaccessibility"
     />
     <style>
+      :root {
+        --color-text: #222;
+        --color-link: #1800ee;
+        --color-link-hover: #001f3f;
+        --color-border: #ccc;
+        --color-bg-light: #f1f1f1;
+        --color-bg-success: #d4edda;
+        --color-bg-warning: #fff3cd;
+        --color-bg-failure: #f8d7da;
+        --color-bg-default: #f6f6f6;
+        --focus-outline: 3px solid var(--color-text);
+        --focus-shadow: 0 0 0 6px var(--color-bg-light);
+      }
       *,
       *::after,
       *::before {
@@ -25,7 +38,7 @@
         }
       }
       body {
-        color: #222;
+        color: var(--color-text);
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
           sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -41,23 +54,24 @@
       :focus {
         scroll-padding-block-end: 8vh;
       }
-      :focus-visible {
-        outline: 3px solid #222;
+      :focus-visible,
+      .upload-input:is(:hover, .has-focus, :focus) + label strong {
+        outline: var(--focus-outline);
         outline-offset: 0;
-        box-shadow: 0 0 0 6px #f1f1f1;
+        box-shadow: var(--focus-shadow);
       }
       .faux-header,
       footer {
-        background-color: #f1f1f1;
+        background-color: var(--color-bg-light);
         padding-block: 1em;
         padding-inline: 1em;
       }
       .faux-header {
-        border-block-end: 1px solid #ccc;
+        border-block-end: 1px solid var(--color-border);
         margin-block-end: 1.5em;
       }
       footer {
-        border-block-start: 1px solid #ccc;
+        border-block-start: 1px solid var(--color-border);
         margin-block-start: 1.5em;
         padding-block: 3em;
       }
@@ -87,11 +101,11 @@
       }
       a:link,
       a:visited {
-        color: #1800ee;
+        color: var(--color-link);
       }
       form {
-        background-color: #f1f1f1;
-        border: 1px solid #ccc;
+        background-color: var(--color-bg-light);
+        border: 1px solid var(--color-border);
         margin-block-end: 2em;
         margin-block-start: 2em;
         padding-block: 3em;
@@ -119,7 +133,7 @@
         text-align: center;
       }
       blockquote {
-        border-inline-start: 3px solid #ccc;
+        border-inline-start: 3px solid var(--color-border);
         color: #595959;
         margin-block: 1em;
         margin-inline: 0;
@@ -147,26 +161,25 @@
       .flag strong {
         display: flex;
         align-items: center;
-        min-width: 12em;
+        padding-inline-end: 1em;
       }
       .first {
         margin-block-start: 0;
       }
-      .default {
-        background-color: #f6f6f6;
+      .flag[data-status="default"] {
+        background-color: var(--color-bg-default);
       }
-      .failure {
-        background-color: #f8d7da;
+      .flag[data-status="failure"] {
+        background-color: var(--color-bg-failure);
       }
-      .warning {
-        background-color: #fff3cd;
+      .flag[data-status="warning"] {
+        background-color: var(--color-bg-warning);
       }
-      .is-dragover,
-      .success {
-        background-color: #d4edda;
+      .flag[data-status="success"],
+      .is-dragover {
+        background-color: var(--color-bg-success);
       }
       .title {
-        display: block;
         font-size: 1.5em;
         font-weight: bold;
         margin-block: 1.5em 0.25em;
@@ -184,17 +197,12 @@
         text-align: center;
       }
       .upload-input + label strong {
-        color: #1800ee;
+        color: var(--color-link);
         text-decoration: underline;
       }
-      .upload-input + label:hover strong,
-      .upload-input.has-focus + label strong,
-      .upload-input:focus + label strong {
-        color: #001f3f;
+      .upload-input:is(:hover, .has-focus, :focus) + label strong {
+        color: var(--color-link-hover);
         cursor: pointer;
-        outline: 3px solid #222;
-        outline-offset: 0;
-        box-shadow: 0 0 0 6px #f1f1f1;
       }
       .submit {
         text-align: center;
@@ -208,12 +216,15 @@
         white-space: nowrap;
         inline-size: 0.1rem;
       }
+      @media (prefers-contrast: high) {
+        :focus-visible,
+        .upload-input:is(:hover, .has-focus, :focus) + label strong {
+          outline-width: 4px;
+        }
+      }
       @media screen and (min-width: 30em) {
         .flag {
           display: flex;
-        }
-        .title {
-          display: block;
         }
       }
       @media screen and (min-width: 64em) {
@@ -296,7 +307,7 @@
           ></div>
         </section>
         <section class="help" aria-labelledby="tests">
-          <p class="flag warning first">
+          <p class="flag first" data-status="warning">
             Files are only loaded locally and are not transmitted anywhere.
           </p>
           <h2 id="tests" tabindex="-1">Tests and example output</h2>
@@ -312,10 +323,12 @@
               This check doesn't determine if existing tags are correct.
             </p>
             <h4>Possible tagged values:</h4>
-            <p class="flag success">
+            <p class="flag" data-status="success">
               <span>Tagged</span> <strong>Yes (# tags)</strong>
             </p>
-            <p class="flag failure"><span>Tagged</span> <strong>No</strong></p>
+            <p class="flag" data-status="failure">
+              <span>Tagged</span> <strong>No</strong>
+            </p>
           </article>
           <article>
             <h3 id="help-language" tabindex="-1">Language</h3>
@@ -330,10 +343,10 @@
               down
             </p>
             <h4>Possible language values:</h4>
-            <p class="flag success">
+            <p class="flag" data-status="success">
               <span>Language</span> <strong>(Language abbreviation)</strong>
             </p>
-            <p class="flag failure">
+            <p class="flag" data-status="failure">
               <span>Language</span> <strong>Not set</strong>
             </p>
           </article>
@@ -360,13 +373,15 @@
               >.
             </p>
             <h4>Possible marked values:</h4>
-            <p class="flag success">
+            <p class="flag" data-status="success">
               <span>Marked</span> <strong>True</strong>
             </p>
-            <p class="flag warning">
+            <p class="flag" data-status="warning">
               <span>Marked</span> <strong>False</strong>
             </p>
-            <p class="flag failure"><span>Marked</span> <strong>No</strong></p>
+            <p class="flag" data-status="failure">
+              <span>Marked</span> <strong>No</strong>
+            </p>
           </article>
           <article>
             <h3 id="help-pdfua" tabindex="-1">PDF/UA identifier</h3>
@@ -391,10 +406,10 @@
               >.
             </p>
             <h4>Possible PDF/UA identifier values:</h4>
-            <p class="flag success">
+            <p class="flag" data-status="success">
               <span>PDF/UA identifier</span> <strong>Yes</strong>
             </p>
-            <p class="flag warning">
+            <p class="flag" data-status="warning">
               <span>PDF/UA identifier</span> <strong>Not set</strong>
             </p>
           </article>
@@ -405,13 +420,13 @@
               &rarr; Properties.
             </p>
             <h4>Possible document title values:</h4>
-            <p class="flag success">
+            <p class="flag" data-status="success">
               <span>Document Title</span> <strong>Document title</strong>
             </p>
-            <p class="flag warning">
+            <p class="flag" data-status="warning">
               <span>Document Title</span> <strong>Empty</strong>
             </p>
-            <p class="flag warning">
+            <p class="flag" data-status="warning">
               <span>Document Title</span> <strong>Not set</strong>
             </p>
           </article>
@@ -429,13 +444,13 @@
               Title&rdquo;
             </p>
             <h4>Possible display document title values:</h4>
-            <p class="flag success">
+            <p class="flag" data-status="success">
               <span>Display Document Title</span> <strong>Enabled</strong>
             </p>
-            <p class="flag warning">
+            <p class="flag" data-status="warning">
               <span>Display Document Title</span> <strong>Disabled</strong>
             </p>
-            <p class="flag warning">
+            <p class="flag" data-status="warning">
               <span>Display Document Title</span>
               <strong>Not configured</strong>
             </p>

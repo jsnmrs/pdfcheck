@@ -57,7 +57,8 @@
       valueText,
     ) {
       const tempNode = document.createElement("p");
-      tempNode.className = `flag ${className}`;
+      tempNode.className = "flag";
+      tempNode.dataset.status = className;
 
       const span = document.createElement("span");
       if (linkHref) {
