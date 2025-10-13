@@ -50,7 +50,8 @@
       .faux-header,
       footer {
         background-color: #f1f1f1;
-        padding: 1em;
+        padding-block: 1em;
+        padding-inline: 1em;
       }
       .faux-header {
         border-block-end: 1px solid #ccc;
@@ -59,7 +60,7 @@
       footer {
         border-block-start: 1px solid #ccc;
         margin-block-start: 1.5em;
-        padding: 3em;
+        padding-block: 3em;
       }
       section {
         padding-block: 0.25em;
@@ -223,9 +224,6 @@
       .submit {
         text-align: center;
         margin-block-start: 2.5rem;
-      }
-      footer p {
-        text-align: center;
       }
       .visually-hidden:not(:focus-within, :active) {
         clip-path: inset(50%);
