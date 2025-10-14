@@ -548,8 +548,8 @@
     const fileLabel = `[${fileExt} - ${fileSize}${fileSizeSuffix}]`;
 
     // Create the heading safely
-    const tempNode = document.createElement("p");
-    tempNode.className = "flag title";
+    const tempNode = document.createElement("h3");
+    tempNode.className = "title";
     tempNode.appendChild(
       document.createTextNode(`${fileNumber}. ${file.name} `),
     );
