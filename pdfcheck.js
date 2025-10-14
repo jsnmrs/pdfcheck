@@ -34,7 +34,8 @@
     },
     addFlag: function (className, content, isHTML = false) {
       const tempNode = document.createElement("p");
-      tempNode.className = `flag ${className}`;
+      tempNode.className = "flag";
+      tempNode.dataset.status = className;
 
       if (isHTML) {
         // Parse the HTML string safely
@@ -60,23 +61,23 @@
       tempNode.className = "flag";
       tempNode.dataset.status = className;
 
-      const span = document.createElement("span");
+      const strong = document.createElement("strong");
       if (linkHref) {
         const link = document.createElement("a");
         link.href = linkHref;
         link.textContent = linkText;
 
-        span.appendChild(link);
+        strong.appendChild(link);
       } else {
-        span.textContent = labelText;
+        strong.textContent = labelText;
       }
-      tempNode.appendChild(span);
+      tempNode.appendChild(strong);
 
       tempNode.appendChild(document.createTextNode(" "));
 
-      const strong = document.createElement("strong");
-      strong.textContent = valueText;
-      tempNode.appendChild(strong);
+      const span = document.createElement("span");
+      span.textContent = valueText;
+      tempNode.appendChild(span);
 
       document.getElementById("report").appendChild(tempNode);
     },

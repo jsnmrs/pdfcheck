@@ -17,9 +17,14 @@
         --color-border: #ccc;
         --color-bg-light: #f1f1f1;
         --color-bg-success: #d4edda;
+        --color-success: #0d5016;
         --color-bg-warning: #fff3cd;
+        --color-warning: #664d03;
         --color-bg-failure: #f8d7da;
+        --color-failure: #5a1a1f;
         --color-bg-default: #f6f6f6;
+        --color-default: #4d4d4d;
+
         --focus-outline: 3px solid var(--color-text);
         --focus-shadow: 0 0 0 6px var(--color-bg-light);
       }
@@ -57,11 +62,15 @@
       :focus-visible,
       .upload-input:is(:hover, .has-focus, :focus) + label strong {
         outline: var(--focus-outline);
-        outline-offset: 0;
+        outline-offset: 2px;
         box-shadow: var(--focus-shadow);
       }
+      :target:focus {
+        outline: var(--focus-outline: );
+        outline-offset: 5px;
+      }
       .faux-header,
-      footer {
+      .footer {
         background-color: var(--color-bg-light);
         padding-block: 1em;
         padding-inline: 1em;
@@ -70,7 +79,7 @@
         border-block-end: 1px solid var(--color-border);
         margin-block-end: 1.5em;
       }
-      footer {
+      .footer {
         border-block-start: 1px solid var(--color-border);
         margin-block-start: 1.5em;
         padding-block: 3em;
@@ -132,13 +141,21 @@
         font-size: 1.5em;
         text-align: center;
       }
+      button {
+        border: 2px solid #444;
+        padding-block: 0.25em;
+        padding-inline: 0.75em;
+      }
       blockquote {
-        border-inline-start: 3px solid var(--color-border);
+        border-inline-start: 0.35em solid var(--color-border);
         color: #595959;
         margin-block: 1em;
         margin-inline: 0;
         padding-block: 0;
-        padding-inline: 1em;
+        padding-inline: 0.75em;
+      }
+      blockquote p {
+        margin-block-end: 0.5em;
       }
       small {
         padding-inline-start: 0.25em;
@@ -150,12 +167,12 @@
         display: flex;
       }
       .flag {
-        border-radius: 0.25em;
         display: block;
         margin-block: 0.25em;
         margin-inline: 0;
         padding-block: 0.5em;
         padding-inline: 0.75em;
+        border: 0.1em solid transparent;
       }
       .flag span,
       .flag strong {
@@ -168,16 +185,24 @@
       }
       .flag[data-status="default"] {
         background-color: var(--color-bg-default);
+        color: var(--color-default);
+        border-color: var(--color-default);
       }
       .flag[data-status="failure"] {
         background-color: var(--color-bg-failure);
+        color: var(--color-failure);
+        border-color: var(--color-failure);
       }
       .flag[data-status="warning"] {
         background-color: var(--color-bg-warning);
+        color: var(--color-warning);
+        border-color: var(--color-warning);
       }
       .flag[data-status="success"],
       .is-dragover {
         background-color: var(--color-bg-success);
+        color: var(--color-success);
+        border-color: var(--color-success);
       }
       .title {
         font-size: 1.5em;
@@ -262,6 +287,9 @@
       </div>
       <div class="wrap">
         <section aria-labelledby="checks">
+          <p class="flag first" data-status="warning">
+            Files are only loaded locally and are not transmitted anywhere.
+          </p>
           <h2 class="visually-hidden" id="checks">Check PDFs</h2>
           <form class="box" id="dropzone">
             <svg
@@ -307,13 +335,10 @@
           ></div>
         </section>
         <section class="help" aria-labelledby="tests">
-          <p class="flag first" data-status="warning">
-            Files are only loaded locally and are not transmitted anywhere.
-          </p>
           <h2 id="tests" tabindex="-1">Tests and example output</h2>
           <p><span id="learn">Learn more about </span>the tests and results.</p>
-          <article>
-            <h3 id="help-tagged" tabindex="-1">Tagged</h3>
+          <article id="help-tagged" tabindex="-1">
+            <h3>Tagged</h3>
             <p>
               This check indicates that tags are present in the document.
               <strong
@@ -324,14 +349,14 @@
             </p>
             <h4>Possible tagged values:</h4>
             <p class="flag" data-status="success">
-              <span>Tagged</span> <strong>Yes (# tags)</strong>
+              <strong>Tagged</strong> <span>Yes (# tags)</span>
             </p>
             <p class="flag" data-status="failure">
-              <span>Tagged</span> <strong>No</strong>
+              <strong>Tagged</strong> <span>No</span>
             </p>
           </article>
-          <article>
-            <h3 id="help-language" tabindex="-1">Language</h3>
+          <article id="help-language" tabindex="-1">
+            <h3>Language</h3>
             <p>
               All documents should have the language attribute set. Correct
               values for English documents are <strong>(en)</strong> or
@@ -344,27 +369,27 @@
             </p>
             <h4>Possible language values:</h4>
             <p class="flag" data-status="success">
-              <span>Language</span> <strong>(Language abbreviation)</strong>
+              <strong>Language</strong> <span>(Language abbreviation)</span>
             </p>
             <p class="flag" data-status="failure">
-              <span>Language</span> <strong>Not set</strong>
+              <strong>Language</strong> <span>Not set</span>
             </p>
           </article>
-          <article>
-            <h3 id="help-marked" tabindex="-1">Marked</h3>
-            <p>
-              In the
-              <a
-                href="https://web.archive.org/web/20210211033910/https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/PDF32000_2008.pdf"
-                >official ISO PDF-1.7 specification [PDF - 9 MB]</a
-              >, on page 574:
-            </p>
+          <article id="help-marked" tabindex="-1">
+            <h3>Marked</h3>
             <blockquote>
               <p>
                 A Tagged PDF document shall also contain a mark information
                 dictionary (see Table 321) with a value of true for the Marked
                 entry.
               </p>
+              —
+              <cite
+                ><a
+                  href="https://web.archive.org/web/20210211033910/https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/PDF32000_2008.pdf"
+                  >ISO PDF-1.7 specification, page 574 [PDF - 9 MB]</a
+                ></cite
+              >
             </blockquote>
             <p>
               <a
@@ -374,23 +399,19 @@
             </p>
             <h4>Possible marked values:</h4>
             <p class="flag" data-status="success">
-              <span>Marked</span> <strong>True</strong>
+              <strong>Marked</strong> <span>True</span>
             </p>
             <p class="flag" data-status="warning">
-              <span>Marked</span> <strong>False</strong>
+              <strong>Marked</strong> <span>False</span>
             </p>
             <p class="flag" data-status="failure">
-              <span>Marked</span> <strong>No</strong>
+              <strong>Marked</strong> <span>No</span>
             </p>
           </article>
-          <article>
-            <h3 id="help-pdfua" tabindex="-1">PDF/UA identifier</h3>
+          <article id="help-pdfua" tabindex="-1">
+            <h3>PDF/UA identifier</h3>
             <p>
-              This checkpoint isn&rsquo;t a deal breaker. From
-              <a
-                href="https://taggedpdf.com/508-pdf-help-center/pdfua-identifier-missing/"
-                >taggedpdf.com</a
-              >:
+              This checkpoint isn&rsquo;t a deal breaker.
             </p>
             <blockquote>
               <p>
@@ -398,6 +419,10 @@
                 compliant. It should be added as the final remediation step;
                 otherwise you would kind of be fibbing.
               </p>
+              — <cite><a
+                  href="https://taggedpdf.com/508-pdf-help-center/pdfua-identifier-missing/"
+                  >TaggedPDF.com: PDF/UA Identifier Missing</a
+                >
             </blockquote>
             <p>
               <a href="https://www.youtube.com/watch?v=OCbaSQ73zn0"
@@ -407,33 +432,31 @@
             </p>
             <h4>Possible PDF/UA identifier values:</h4>
             <p class="flag" data-status="success">
-              <span>PDF/UA identifier</span> <strong>Yes</strong>
+              <strong>PDF/UA identifier</strong> <span>Yes</span>
             </p>
             <p class="flag" data-status="warning">
-              <span>PDF/UA identifier</span> <strong>Not set</strong>
+              <strong>PDF/UA identifier</strong> <span>Not set</span>
             </p>
           </article>
-          <article>
-            <h3 id="help-title" tabindex="-1">Document Title</h3>
+          <article id="help-title" tabindex="-1">
+            <h3>Document Title</h3>
             <p>
               A conformant PDF will have a readable title specified in File
               &rarr; Properties.
             </p>
             <h4>Possible document title values:</h4>
             <p class="flag" data-status="success">
-              <span>Document Title</span> <strong>Document title</strong>
+              <strong>Document Title</strong> <span>Document title</span>
             </p>
             <p class="flag" data-status="warning">
-              <span>Document Title</span> <strong>Empty</strong>
+              <strong>Document Title</strong> <span>Empty</span>
             </p>
             <p class="flag" data-status="warning">
-              <span>Document Title</span> <strong>Not set</strong>
+              <strong>Document Title</strong> <span>Not set</span>
             </p>
           </article>
-          <article>
-            <h3 id="help-display-title" tabindex="-1">
-              Display Document Title
-            </h3>
+          <article id="help-display-title" tabindex="-1">
+            <h3>Display Document Title</h3>
             <p>
               When enabled, PDF viewers will display the document title in the
               title bar instead of the filename.
@@ -445,21 +468,21 @@
             </p>
             <h4>Possible display document title values:</h4>
             <p class="flag" data-status="success">
-              <span>Display Document Title</span> <strong>Enabled</strong>
+              <strong>Display Document Title</strong> <span>Enabled</span>
             </p>
             <p class="flag" data-status="warning">
-              <span>Display Document Title</span> <strong>Disabled</strong>
+              <strong>Display Document Title</strong> <span>Disabled</span>
             </p>
             <p class="flag" data-status="warning">
-              <span>Display Document Title</span>
-              <strong>Not configured</strong>
+              <strong>Display Document Title</strong>
+              <span>Not configured</span>
             </p>
           </article>
         </section>
       </div>
     </main>
 
-    <footer>
+    <footer class="footer">
       <p>
         MIT Licensed. Read the
         <a href="https://jasonmorris.com/code/pdfcheck/">PDFcheck blog post</a>.
