@@ -111,10 +111,7 @@
           file.name.toLowerCase().endsWith(".pdf");
 
         if (!isPDF) {
-          ui.addFlag(
-            "failure",
-            `<strong>Not a PDF file: ${file.name}</strong>`,
-          );
+          ui.addFlag("failure", `${file.name} is not a PDF file.`);
         }
         return isPDF;
       });
@@ -154,10 +151,7 @@
 
         // Double-check file type before reading
         if (!file.name.toLowerCase().endsWith(".pdf")) {
-          ui.addFlag(
-            "failure",
-            `<strong>Skipping non-PDF: ${file.name}</strong>`,
-          );
+          ui.addFlag("failure", `${file.name} is not a PDF file.`);
           continue;
         }
 
@@ -301,9 +295,9 @@
     }
     ui.addFlagWithLink(
       "default",
-      "PDF Version:",
+      "PDF Version",
       null,
-      "PDF Version:",
+      "PDF Version",
       matchHeader[1],
     );
     return true;
