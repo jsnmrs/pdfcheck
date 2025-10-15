@@ -48,20 +48,18 @@
       body {
         scroll-padding-block-start: 5rem;
       }
-      :target {
-        scroll-padding-block-start: 2rem;
-      }
       :focus {
         scroll-padding-block-end: 8vh;
       }
       :focus-visible,
+      :focus,
       .upload-input:is(:hover, .has-focus, :focus) + label strong {
         outline: var(--focus-outline);
         outline-offset: 2px;
         box-shadow: var(--focus-shadow);
       }
-      :target:focus {
-        outline: var(--focus-outline: );
+      :target {
+        scroll-padding-block-start: 2rem;
         outline-offset: 5px;
       }
       .faux-header,
@@ -330,7 +328,7 @@
             <div class="example-result">
               <p>Here&rsquo;s an example result:</p>
               <h3>
-                1. tagged-HTML-headings-PAC-2024-pass.pdf
+                tagged-HTML-headings-PAC-2024-pass.pdf
                 <small>[PDF - 115KB]</small>
               </h3>
               <p class="flag" data-status="default">
