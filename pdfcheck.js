@@ -62,15 +62,7 @@
       tempNode.dataset.status = className;
 
       const strong = document.createElement("strong");
-      if (linkHref) {
-        const link = document.createElement("a");
-        link.href = linkHref;
-        link.textContent = linkText;
-
-        strong.appendChild(link);
-      } else {
-        strong.textContent = labelText;
-      }
+      strong.textContent = labelText;
       tempNode.appendChild(strong);
 
       tempNode.appendChild(document.createTextNode(" "));
@@ -79,6 +71,7 @@
       span.textContent = valueText;
       tempNode.appendChild(span);
 
+      document.querySelectorAll(".example-result").forEach((el) => el.remove());
       document.getElementById("report").appendChild(tempNode);
     },
   };
@@ -543,7 +536,6 @@
 
     // Create the heading safely
     const tempNode = document.createElement("h3");
-    tempNode.className = "title";
     tempNode.appendChild(
       document.createTextNode(`${fileNumber}. ${file.name} `),
     );
