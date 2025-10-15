@@ -4,19 +4,41 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>PDFcheck example files</title>
-    <meta name="author" content="Jason Morris" />
-    <meta
-      name="description"
-      content="Immediately check one or more PDF files for signs of inaccessibility"
-    />
     <style>
+      :root {
+        --color-text: #222;
+        --color-link: #1800ee;
+        --color-link-hover: #001f3f;
+        --color-border: #ccc;
+        --color-bg-light: #f1f1f1;
+        --color-bg-success: #d4edda;
+        --color-success: #0d5016;
+        --color-bg-warning: #fff3cd;
+        --color-warning: #664d03;
+        --color-bg-failure: #f8d7da;
+        --color-failure: #5a1a1f;
+        --color-bg-default: #f6f6f6;
+        --color-default: #4d4d4d;
+
+        --focus-outline: 3px solid var(--color-text);
+        --focus-shadow: 0 0 0 6px var(--color-bg-light);
+      }
       *,
       *::after,
       *::before {
         box-sizing: border-box;
       }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::after,
+        *::before {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
       body {
-        color: #222;
+        color: var(--color-text);
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
           sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -32,55 +54,66 @@
       :focus {
         scroll-padding-block-end: 8vh;
       }
-      :focus-visible {
-        outline: 3px solid #222;
-        outline-offset: 0;
-        box-shadow: 0 0 0 6px #f1f1f1;
+      :focus-visible,
+      .upload-input:is(:hover, .has-focus, :focus) + label strong {
+        outline: var(--focus-outline);
+        outline-offset: 2px;
+        box-shadow: var(--focus-shadow);
+      }
+      :target:focus {
+        outline: var(--focus-outline: );
+        outline-offset: 5px;
       }
       .faux-header,
-      footer {
-        background-color: #f1f1f1;
-        padding: 1em;
+      .footer {
+        background-color: var(--color-bg-light);
+        padding-block: 1em;
+        padding-inline: 1em;
       }
       .faux-header {
-        border-bottom: 1px solid #ccc;
-        margin-bottom: 1.5em;
+        border-block-end: 1px solid var(--color-border);
+        margin-block-end: 1.5em;
       }
-      footer {
-        border-top: 1px solid #ccc;
-        margin-top: 1.5em;
-        padding: 3em;
+      .footer {
+        border-block-start: 1px solid var(--color-border);
+        margin-block-start: 1.5em;
+        padding-block: 3em;
       }
       section {
-        padding: 0.25em 1em;
+        padding-block: 0.25em;
+        padding-inline: 1em;
       }
       article {
-        margin-bottom: 2.5em;
+        margin-block-end: 2.5em;
       }
       h1 {
         margin: 0;
       }
       h2 {
-        margin: 1em 0 0.5em;
+        margin-block: 1em 0.5em;
+        margin-inline: 0;
       }
       h3,
       h4 {
-        margin: 1em 0 0.5em;
+        margin-block: 1em 0.5em;
+        margin-inline: 0;
       }
       p {
         line-height: 1.4;
-        margin: 0.5em 0 0;
+        margin-block: 0.5em 0;
+        margin-inline: 0;
       }
       a:link,
       a:visited {
-        color: #1800ee;
+        color: var(--color-link);
       }
       form {
-        background-color: #f1f1f1;
-        border: 1px solid #ccc;
-        margin-bottom: 2em;
-        margin-top: 2em;
-        padding: 3em 2em;
+        background-color: var(--color-bg-light);
+        border: 1px solid var(--color-border);
+        margin-block-end: 2em;
+        margin-block-start: 2em;
+        padding-block: 3em;
+        padding-inline: 2em;
         position: relative;
         transition: background-color 0.15s linear;
       }
@@ -88,127 +121,130 @@
       label {
         display: block;
         font-size: 1em;
-        margin: 0.5em 0;
+        margin-block: 0.5em;
+        margin-inline: 0;
       }
       input[type="file"] {
-        margin: 0.5em auto;
+        margin-block: 0.5em;
+        margin-inline: auto;
         border: 2px solid #444;
         padding: 0.5em;
+        max-inline-size: 100%;
       }
       label,
       button {
         font-size: 1.5em;
         text-align: center;
       }
+      button {
+        border: 2px solid #444;
+        padding-block: 0.25em;
+        padding-inline: 0.75em;
+      }
       blockquote {
-        border-left: 3px solid #ccc;
-        color: #666;
-        margin: 1em 0.5em;
-        padding: 0 1em;
+        border-inline-start: 0.35em solid var(--color-border);
+        color: #595959;
+        margin-block: 1em;
+        margin-inline: 0;
+        padding-block: 0;
+        padding-inline: 0.65em;
+      }
+      blockquote p {
+        margin-block-end: 0.5em;
       }
       small {
-        padding-left: 0.25em;
+        padding-inline-start: 0.15em;
       }
       .help {
-        margin-top: 3em;
+        margin-block-start: 1em;
       }
       .help h2 {
         display: flex;
       }
       .flag {
-        border-radius: 0.25em;
         display: block;
-        margin: 0.25em 0;
-        padding: 0.5em 0.75em;
+        margin-block: 0.25em;
+        margin-inline: 0;
+        padding-block: 0.5em;
+        padding-inline: 0.65em;
+        border: 0.1em solid transparent;
       }
       .flag span,
       .flag strong {
         display: flex;
         align-items: center;
-        min-width: 12em;
+        padding-inline-end: 1em;
       }
       .first {
-        margin-top: 0;
+        margin-block-start: 0;
       }
-      .default {
-        background-color: #f6f6f6;
+      .flag[data-status="default"] {
+        background-color: var(--color-bg-default);
+        color: var(--color-default);
+        border-color: var(--color-default);
       }
-      .failure {
-        background-color: #f8d7da;
+      .flag[data-status="failure"] {
+        background-color: var(--color-bg-failure);
+        color: var(--color-failure);
+        border-color: var(--color-failure);
       }
-      .warning {
-        background-color: #fff3cd;
+      .flag[data-status="warning"] {
+        background-color: var(--color-bg-warning);
+        color: var(--color-warning);
+        border-color: var(--color-warning);
       }
-      .is-dragover,
-      .success {
-        background-color: #d4edda;
+      .flag[data-status="success"],
+      .is-dragover {
+        background-color: var(--color-bg-success);
+        color: var(--color-success);
+        border-color: var(--color-success);
       }
       .title {
-        display: block;
         font-size: 1.5em;
         font-weight: bold;
-        margin: 1.5em 0 0.25em;
+        margin-block: 1.5em 0.25em;
+        margin-inline: 0;
         padding: 0;
       }
       .upload-icon {
-        width: 100%;
-        height: 4em;
-        fill: #333;
+        inline-size: 100%;
+        block-size: 4em;
+        fill: currentColor;
         display: block;
-        margin-bottom: 2em;
+        margin-block-end: 2em;
       }
       .upload-input + label {
         text-align: center;
       }
       .upload-input + label strong {
-        color: #1800ee;
+        color: var(--color-link);
         text-decoration: underline;
       }
-      .upload-input + label:hover strong,
-      .upload-input.has-focus + label strong,
-      .upload-input:focus + label strong {
-        color: #001f3f;
+      .upload-input:is(:hover, .has-focus, :focus) + label strong {
+        color: var(--color-link-hover);
         cursor: pointer;
-        outline: 3px solid #222;
-        outline-offset: 0;
-        box-shadow: 0 0 0 6px #f1f1f1;
-      }
-      .more-info {
-        background-color: #0074d9;
-        border: 1px solid #0074d9;
-        border-radius: 50%;
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-        font-size: 0.75em;
-        font-weight: bold;
-        width: 1.25em;
-        height: 1.25em;
-        text-align: center;
-        text-decoration: none;
-        margin-left: 0.5em;
-        margin-top: 0.15em;
-      }
-      .more-info:link,
-      .more-info:visited {
-        color: #fff;
       }
       .submit {
         text-align: center;
-        margin-top: 2.5rem;
+        margin-block-start: 2.5rem;
       }
-      footer p {
-        text-align: center;
+      .visually-hidden:not(:focus-within, :active) {
+        clip-path: inset(50%);
+        block-size: 0.1rem;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        inline-size: 0.1rem;
+      }
+      @media (prefers-contrast: high) {
+        :focus-visible,
+        .upload-input:is(:hover, .has-focus, :focus) + label strong {
+          outline-width: 4px;
+        }
       }
       @media screen and (min-width: 30em) {
         .flag {
           display: flex;
-        }
-        .title {
-          display: block;
         }
       }
       @media screen and (min-width: 64em) {
@@ -217,21 +253,31 @@
           align-items: baseline;
         }
         .info {
-          padding: 0 2em;
+          padding-block: 0;
+          padding-inline: 2em;
         }
         .wrap {
           display: flex;
         }
-        section:first-child {
+        .wrap > :first-child {
           flex-grow: 1;
         }
         .help {
           flex-shrink: 0;
-          margin-top: 2em;
-          max-width: 32em;
+          margin-block-start: 0;
+          max-inline-size: 32em;
         }
       }
     </style>
+    <meta name="author" content="Jason Morris" />
+    <meta
+      name="description"
+      content="Immediately check one or more PDF files for signs of inaccessibility"
+    />
+    <link
+      rel="canonical"
+      href="https://code.jasonmorris.com/pdfcheck/examples"
+    />
   </head>
   <body>
     <main>
@@ -244,7 +290,7 @@
         </div>
       </div>
       <div class="wrap">
-        <div>
+        <section>
           <ol>
             <li><a href="not-pdf.txt">Text file (not a PDF)</a></li>
             <li>
@@ -301,7 +347,7 @@
           </ol>
 
           <p><a href="../">Back to PDFcheck</a></p>
-        </div>
+        </section>
       </div>
     </main>
   </body>
