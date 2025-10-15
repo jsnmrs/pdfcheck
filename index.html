@@ -274,7 +274,7 @@
       name="description"
       content="Immediately check one or more PDF files for signs of inaccessibility"
     />
-    <link rel="canonical" href="https://code.jasonmorris.com/pdfcheck">
+    <link rel="canonical" href="https://code.jasonmorris.com/pdfcheck" />
   </head>
   <body>
     <main>
@@ -291,7 +291,9 @@
           <section aria-labelledby="checks">
             <h2 id="checks">Add files to review</h2>
             <p>
-              Files are only loaded locally and are not transmitted anywhere. Need files to try? Here&rsquo;s <a href="examples/">a list of example PDFs to check</a>.
+              Files are only loaded locally and are not transmitted anywhere.
+              Need files to try? Here&rsquo;s
+              <a href="examples/">a list of example PDF files to check</a>.
             </p>
 
             <form class="box" id="dropzone">
@@ -327,22 +329,49 @@
             <h2 id="results">Results</h2>
             <div class="example-result">
               <p>Here&rsquo;s an example result:</p>
-              <h3>1. tagged-HTML-headings-PAC-2024-pass.pdf <small>[PDF - 115KB]</small></h3>
-              <p class="flag" data-status="default"><strong>PDF Version</strong> <span>1.7</span></p>
-              <p class="flag" data-status="default"><strong>Creator Tool</strong> <span>Microsoft Word 2019</span></p>
-              <p class="flag" data-status="default"><strong>Producer</strong> <span>Adobe PDF Services</span></p>
-              <p class="flag" data-status="default"><strong><a href="#help-title">Document Title</a></strong> <span>Heading level reference</span></p>
-              <p class="flag" data-status="warning"><strong><a href="#help-display-title">Display Document Title</a></strong> <span>Not configured</span></p>
-              <p class="flag" data-status="success"><strong><a href="#help-tagged">Tagged</a></strong> <span>Yes (38 tags)</span></p>
-              <p class="flag" data-status="success"><strong><a href="#help-language">Language</a></strong> <span>en-US</span></p>
-              <p class="flag" data-status="success"><strong><a href="#help-marked">Marked</a></strong> <span>True</span></p>
-              <p class="flag" data-status="success"><strong><a href="#help-pdfua">PDF/UA identifier</a></strong> <span>Yes</span></p>
+              <h3>
+                1. tagged-HTML-headings-PAC-2024-pass.pdf
+                <small>[PDF - 115KB]</small>
+              </h3>
+              <p class="flag" data-status="default">
+                <strong>PDF Version</strong> <span>1.7</span>
+              </p>
+              <p class="flag" data-status="default">
+                <strong>Creator Tool</strong> <span>Microsoft Word 2019</span>
+              </p>
+              <p class="flag" data-status="default">
+                <strong>Producer</strong> <span>Adobe PDF Services</span>
+              </p>
+              <p class="flag" data-status="default">
+                <strong><a href="#help-title">Document Title</a></strong>
+                <span>Heading level reference</span>
+              </p>
+              <p class="flag" data-status="warning">
+                <strong
+                  ><a href="#help-display-title"
+                    >Display Document Title</a
+                  ></strong
+                >
+                <span>Not configured</span>
+              </p>
+              <p class="flag" data-status="success">
+                <strong><a href="#help-tagged">Tagged</a></strong>
+                <span>Yes (38 tags)</span>
+              </p>
+              <p class="flag" data-status="success">
+                <strong><a href="#help-language">Language</a></strong>
+                <span>en-US</span>
+              </p>
+              <p class="flag" data-status="success">
+                <strong><a href="#help-marked">Marked</a></strong>
+                <span>True</span>
+              </p>
+              <p class="flag" data-status="success">
+                <strong><a href="#help-pdfua">PDF/UA identifier</a></strong>
+                <span>Yes</span>
+              </p>
             </div>
-            <output
-              for="dropzone"
-              name="report"
-              id="report"
-            ></output>
+            <output for="dropzone" name="report" id="report"></output>
             <div
               class="visually-hidden"
               role="status"
@@ -375,7 +404,9 @@
           <article id="help-language" tabindex="-1">
             <h3>Language</h3>
             <p>
-              All documents should have the language attribute set. For example, a document primarily in U.S. English should use <strong>(en-US)</strong>.
+              All documents should have the language attribute set. For example,
+              a document primarily in U.S. English should use
+              <strong>(en-US)</strong>.
             </p>
             <p>
               To set the language in Acrobat, go to: File &rarr; Properties
@@ -425,19 +456,20 @@
           </article>
           <article id="help-pdfua" tabindex="-1">
             <h3>PDF/UA identifier</h3>
-            <p>
-              This checkpoint isn&rsquo;t a deal breaker.
-            </p>
+            <p>This checkpoint isn&rsquo;t a deal breaker.</p>
             <blockquote>
               <p>
                 The PDF/UA ID attests that the PDF is ISO 14289 (PDF/UA)
                 compliant. It should be added as the final remediation step;
                 otherwise you would kind of be fibbing.
               </p>
-              — <cite><a
+              —
+              <cite
+                ><a
                   href="https://taggedpdf.com/508-pdf-help-center/pdfua-identifier-missing/"
                   >TaggedPDF.com: PDF/UA Identifier Missing</a
                 >
+              </cite>
             </blockquote>
             <p>
               <a href="https://www.youtube.com/watch?v=OCbaSQ73zn0"
