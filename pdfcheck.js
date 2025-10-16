@@ -151,11 +151,13 @@
         try {
           const fileData = await this.readFileAsync(file);
           this.runCheck(file, fileData, i + 1);
-          ui.announceStatus(`Completed checking ${file.name}`);
+          ui.announceStatus(
+            `Completed checking files. Read forward for results.`,
+          );
         } catch (error) {
           console.error("File read error:", error);
           ui.addFlag("failure", `Error reading file: ${file.name}`);
-          ui.announceStatus(`Error reading file: ${file.name}`);
+          ui.announceStatus(`Error reading files. Read forward for details.`);
         }
       }
     },
