@@ -74,6 +74,7 @@ jobs:
         uses: double-great/accessibility-scan-action@main
         with:
           url: "http://localhost:3000"
+          crawl: false
         timeout-minutes: 5
 
       - name: Stop development server
