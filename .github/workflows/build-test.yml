@@ -74,7 +74,6 @@ jobs:
         uses: double-great/accessibility-scan-action@main
         with:
           url: "http://localhost:3000"
-          inputUrls: "http://localhost:3000"
           baselineFile: ${{ github.workspace }}/.github/pdfcheck.baseline
         timeout-minutes: 5
 
