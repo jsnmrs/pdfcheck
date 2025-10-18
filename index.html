@@ -186,16 +186,43 @@
         color: var(--color-failure);
         border-color: var(--color-failure);
       }
+      .flag[data-status="failure"]::after {
+        content: attr(data-status);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
       .flag[data-status="warning"] {
         background-color: var(--color-bg-warning);
         color: var(--color-warning);
         border-color: var(--color-warning);
+      }
+      .flag[data-status="warning"]::after {
+        content: attr(data-status);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
       }
       .flag[data-status="success"],
       .is-dragover {
         background-color: var(--color-bg-success);
         color: var(--color-success);
         border-color: var(--color-success);
+      }
+      .flag[data-status="success"]::after {
+        content: attr(data-status);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
       }
       .title {
         font-size: 1.5em;
