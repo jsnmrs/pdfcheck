@@ -4,19 +4,41 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>PDFcheck</title>
-    <meta name="author" content="Jason Morris" />
-    <meta
-      name="description"
-      content="Immediately check one or more PDF files for signs of inaccessibility"
-    />
     <style>
+      :root {
+        --color-text: #222;
+        --color-link: #1800ee;
+        --color-link-hover: #001f3f;
+        --color-border: #ccc;
+        --color-bg-light: #f1f1f1;
+        --color-bg-success: #d4edda;
+        --color-success: #0d5016;
+        --color-bg-warning: #fff3cd;
+        --color-warning: #664d03;
+        --color-bg-failure: #f8d7da;
+        --color-failure: #5a1a1f;
+        --color-bg-default: #f6f6f6;
+        --color-default: #4d4d4d;
+
+        --focus-outline: 3px solid var(--color-text);
+        --focus-shadow: 0 0 0 6px var(--color-bg-light);
+      }
       *,
       *::after,
       *::before {
         box-sizing: border-box;
       }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::after,
+        *::before {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
       body {
-        color: #222;
+        color: var(--color-text);
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
           sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -26,61 +48,70 @@
       body {
         scroll-padding-block-start: 5rem;
       }
-      :target {
-        scroll-padding-block-start: 2rem;
-      }
       :focus {
         scroll-padding-block-end: 8vh;
       }
-      :focus-visible {
-        outline: 3px solid #222;
-        outline-offset: 0;
-        box-shadow: 0 0 0 6px #f1f1f1;
+      :focus-visible,
+      :focus,
+      .upload-input:is(:hover, .has-focus, :focus) + label strong {
+        outline: var(--focus-outline);
+        outline-offset: 2px;
+        box-shadow: var(--focus-shadow);
+      }
+      :target {
+        scroll-padding-block-start: 2rem;
+        outline-offset: 5px;
       }
       .faux-header,
-      footer {
-        background-color: #f1f1f1;
-        padding: 1em;
+      .footer {
+        background-color: var(--color-bg-light);
+        padding-block: 1em;
+        padding-inline: 1em;
       }
       .faux-header {
-        border-bottom: 1px solid #ccc;
-        margin-bottom: 1.5em;
+        border-block-end: 1px solid var(--color-border);
+        margin-block-end: 1.5em;
       }
-      footer {
-        border-top: 1px solid #ccc;
-        margin-top: 1.5em;
-        padding: 3em;
+      .footer {
+        border-block-start: 1px solid var(--color-border);
+        margin-block-start: 1.5em;
+        padding-block: 3em;
       }
       section {
-        padding: 0.25em 1em;
+        padding-block: 0.25em;
+        padding-inline: 1em;
       }
       article {
-        margin-bottom: 2.5em;
+        margin-block-end: 2.5em;
       }
       h1 {
         margin: 0;
       }
       h2 {
-        margin: 1em 0 0.5em;
+        margin-block: 1em 0.5em;
+        margin-inline: 0;
       }
       h3,
       h4 {
-        margin: 1em 0 0.5em;
+        margin-block: 1em 0.5em;
+        margin-inline: 0;
       }
       p {
         line-height: 1.4;
-        margin: 0.5em 0 0;
+        margin-block: 0.5em 0;
+        margin-inline: 0;
       }
       a:link,
       a:visited {
-        color: #1800ee;
+        color: var(--color-link);
       }
       form {
-        background-color: #f1f1f1;
-        border: 1px solid #ccc;
-        margin-bottom: 2em;
-        margin-top: 2em;
-        padding: 3em 2em;
+        background-color: var(--color-bg-light);
+        border: 1px solid var(--color-border);
+        margin-block-end: 2em;
+        margin-block-start: 2em;
+        padding-block: 3em;
+        padding-inline: 2em;
         position: relative;
         transition: background-color 0.15s linear;
       }
@@ -88,128 +119,151 @@
       label {
         display: block;
         font-size: 1em;
-        margin: 0.5em 0;
+        margin-block: 0.5em;
+        margin-inline: 0;
       }
       input[type="file"] {
-        margin: 0.5em auto;
+        margin-block: 0.5em;
+        margin-inline: auto;
         border: 2px solid #444;
         padding: 0.5em;
-        max-width: 100%;
+        max-inline-size: 100%;
       }
       label,
       button {
         font-size: 1.5em;
         text-align: center;
       }
+      button {
+        border: 2px solid #444;
+        padding-block: 0.25em;
+        padding-inline: 0.75em;
+      }
       blockquote {
-        border-left: 3px solid #ccc;
-        color: #666;
-        margin: 1em 0.5em;
-        padding: 0 1em;
+        border-inline-start: 0.35em solid var(--color-border);
+        color: #595959;
+        margin-block: 1em;
+        margin-inline: 0;
+        padding-block: 0;
+        padding-inline: 0.65em;
+      }
+      blockquote p {
+        margin-block-end: 0.5em;
       }
       small {
-        padding-left: 0.25em;
+        padding-inline-start: 0.15em;
       }
       .help {
-        margin-top: 3em;
+        margin-block-start: 1em;
       }
       .help h2 {
         display: flex;
       }
       .flag {
-        border-radius: 0.25em;
         display: block;
-        margin: 0.25em 0;
-        padding: 0.5em 0.75em;
+        margin-block: 0.25em;
+        margin-inline: 0;
+        padding-block: 0.5em;
+        padding-inline: 0.65em;
+        border: 0.1em solid transparent;
       }
       .flag span,
       .flag strong {
         display: flex;
         align-items: center;
-        min-width: 12em;
+        padding-inline-end: 1em;
       }
       .first {
-        margin-top: 0;
+        margin-block-start: 0;
       }
-      .default {
-        background-color: #f6f6f6;
+      .flag[data-status="default"] {
+        background-color: var(--color-bg-default);
+        color: var(--color-default);
+        border-color: var(--color-default);
       }
-      .failure {
-        background-color: #f8d7da;
+      .flag[data-status="failure"] {
+        background-color: var(--color-bg-failure);
+        color: var(--color-failure);
+        border-color: var(--color-failure);
       }
-      .warning {
-        background-color: #fff3cd;
+      .flag[data-status="failure"]::after {
+        content: attr(data-status);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
       }
-      .is-dragover,
-      .success {
-        background-color: #d4edda;
+      .flag[data-status="warning"] {
+        background-color: var(--color-bg-warning);
+        color: var(--color-warning);
+        border-color: var(--color-warning);
+      }
+      .flag[data-status="warning"]::after {
+        content: attr(data-status);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
+      .flag[data-status="success"],
+      .is-dragover {
+        background-color: var(--color-bg-success);
+        color: var(--color-success);
+        border-color: var(--color-success);
+      }
+      .flag[data-status="success"]::after {
+        content: attr(data-status);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
       }
       .title {
-        display: block;
         font-size: 1.5em;
         font-weight: bold;
-        margin: 1.5em 0 0.25em;
+        margin-block: 1.5em 0.25em;
+        margin-inline: 0;
         padding: 0;
       }
       .upload-icon {
-        width: 100%;
-        height: 4em;
-        fill: #333;
+        inline-size: 100%;
+        block-size: 4em;
+        fill: currentColor;
         display: block;
-        margin-bottom: 2em;
+        margin-block-end: 2em;
       }
       .upload-input + label {
         text-align: center;
       }
       .upload-input + label strong {
-        color: #1800ee;
+        color: var(--color-link);
         text-decoration: underline;
       }
-      .upload-input + label:hover strong,
-      .upload-input.has-focus + label strong,
-      .upload-input:focus + label strong {
-        color: #001f3f;
+      .upload-input:is(:hover, .has-focus, :focus) + label strong {
+        color: var(--color-link-hover);
         cursor: pointer;
-        outline: 3px solid #222;
-        outline-offset: 0;
-        box-shadow: 0 0 0 6px #f1f1f1;
-      }
-      .more-info {
-        background-color: #0074d9;
-        border: 1px solid #0074d9;
-        border-radius: 50%;
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-        font-size: 0.75em;
-        font-weight: bold;
-        width: 1.25em;
-        height: 1.25em;
-        text-align: center;
-        text-decoration: none;
-        margin-left: 0.5em;
-        margin-top: 0.15em;
-      }
-      .more-info:link,
-      .more-info:visited {
-        color: #fff;
       }
       .submit {
         text-align: center;
-        margin-top: 2.5rem;
+        margin-block-start: 2.5rem;
       }
-      footer p {
-        text-align: center;
+      .visually-hidden:not(:focus-within, :active) {
+        clip-path: inset(50%);
+        block-size: 0.1rem;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        inline-size: 0.1rem;
       }
       @media screen and (min-width: 30em) {
         .flag {
           display: flex;
-        }
-        .title {
-          display: block;
         }
       }
       @media screen and (min-width: 64em) {
@@ -218,21 +272,28 @@
           align-items: baseline;
         }
         .info {
-          padding: 0 2em;
+          padding-block: 0;
+          padding-inline: 2em;
         }
         .wrap {
           display: flex;
         }
-        section:first-child {
+        .wrap > :first-child {
           flex-grow: 1;
         }
         .help {
           flex-shrink: 0;
-          margin-top: 2em;
-          max-width: 32em;
+          margin-block-start: 0;
+          max-inline-size: 32em;
         }
       }
     </style>
+    <meta name="author" content="Jason Morris" />
+    <meta
+      name="description"
+      content="Immediately check one or more PDF files for signs of inaccessibility"
+    />
+    <link rel="canonical" href="https://code.jasonmorris.com/pdfcheck" />
   </head>
   <body>
     <main>
@@ -240,69 +301,155 @@
         <h1>PDFcheck<span aria-hidden="true">✓</span></h1>
         <div class="info">
           <p>
-            Immediately check one or more PDF files for signs of
-            in-accessibility
+            Immediately check one or more PDF files for signs of inaccessibility
           </p>
         </div>
       </div>
       <div class="wrap">
-        <section aria-label="Check files">
-          <form class="box" id="dropzone">
-            <svg
-              aria-hidden="true"
-              class="upload-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="50"
-              height="43"
-              viewBox="0 0 50 43"
-            >
-              <path
-                d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z"
+        <div>
+          <section aria-labelledby="checks">
+            <h2 id="checks">Add files to review</h2>
+            <p>
+              Files are only loaded locally and are not transmitted anywhere.
+              Need files to try? Here are a few
+              <a href="https://github.com/jsnmrs/pdfcheck/tree/main/examples"
+                >example PDF files from the GitHub repo to check</a
+              >.
+            </p>
+
+            <form class="box" id="dropzone">
+              <svg
+                aria-hidden="true"
+                class="upload-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="50"
+                height="43"
+                viewBox="0 0 50 43"
+              >
+                <path
+                  d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z"
+                />
+              </svg>
+              <label for="file"
+                ><strong>Choose file(s)</strong
+                ><span> or drag and drop files onto this text</span>.</label
+              >
+              <input
+                type="file"
+                name="files[]"
+                id="file"
+                class="upload-input"
+                data-multiple-caption="{count} files"
+                accept=".pdf,application/pdf"
+                multiple
               />
-            </svg>
-            <label for="file"
-              ><strong>Choose file(s)</strong
-              ><span> or drag them here</span>.</label
-            >
-            <input
-              type="file"
-              name="files[]"
-              id="file"
-              class="upload-input"
-              data-multiple-caption="{count} files"
-              accept=".pdf,application/pdf"
-              multiple
-            />
-            <p class="submit"><button type="submit">Check files</button></p>
-          </form>
-          <div id="report"></div>
-        </section>
-        <section class="help" aria-labelledby="checks">
-          <p class="flag warning first">
-            Files are only loaded locally and are not transmitted anywhere.
-          </p>
-          <h2 id="checks" tabindex="-1">PDFcheck checks</h2>
-          <article>
-            <h3 id="help-tagged" tabindex="-1">Tagged</h3>
+              <p class="submit"><button type="submit">Check files</button></p>
+            </form>
+          </section>
+          <section aria-labelledby="results">
+            <h2 id="results">Results</h2>
+            <div class="example-result">
+              <p>Here&rsquo;s an example result:</p>
+              <h3>
+                example-tagged-PAC-2024-pass.pdf
+                <small>[PDF - 115KB]</small>
+              </h3>
+              <p class="flag" data-status="default">
+                <strong>PDF Version</strong> <span>1.7</span>
+              </p>
+              <p class="flag" data-status="default">
+                <strong>Creator Tool</strong> <span>Microsoft Word 2019</span>
+              </p>
+              <p class="flag" data-status="default">
+                <strong>Producer</strong> <span>Adobe PDF Services</span>
+              </p>
+              <p class="flag" data-status="default">
+                <strong
+                  ><a href="#help-title"
+                    >Document Title<span class="visually-hidden">
+                      test details</span
+                    ></a
+                  ></strong
+                >
+                <span>Heading level reference</span>
+              </p>
+              <p class="flag" data-status="warning">
+                <strong
+                  ><a href="#help-display-title"
+                    >Display Document Title<span class="visually-hidden">
+                      test details</span
+                    ></a
+                  ></strong
+                >
+                <span>Not configured</span>
+              </p>
+              <p class="flag" data-status="success">
+                <strong
+                  ><a href="#help-tagged"
+                    >Tagged<span class="visually-hidden"> test details</span></a
+                  ></strong
+                >
+                <span>Yes (38 tags)</span>
+              </p>
+              <p class="flag" data-status="success">
+                <strong
+                  ><a href="#help-language"
+                    >Language<span class="visually-hidden">
+                      test details</span
+                    ></a
+                  ></strong
+                >
+                <span>en-US</span>
+              </p>
+              <p class="flag" data-status="success">
+                <strong
+                  ><a href="#help-marked"
+                    >Marked<span class="visually-hidden"> test details</span></a
+                  ></strong
+                >
+                <span>True</span>
+              </p>
+              <p class="flag" data-status="success">
+                <strong
+                  ><a href="#help-pdfua"
+                    >PDF/UA identifier<span class="visually-hidden">
+                      test details</span
+                    ></a
+                  ></strong
+                >
+                <span>Yes</span>
+              </p>
+            </div>
+            <div id="report"></div>
+            <div class="visually-hidden" role="status" id="announce"></div>
+          </section>
+        </div>
+        <section class="help" aria-labelledby="tests">
+          <h2 id="tests" tabindex="-1">Tests</h2>
+          <p><span id="learn">Learn more about </span>the tests and results.</p>
+          <article id="help-tagged" tabindex="-1">
+            <h3>Tagged</h3>
             <p>
               This check indicates that tags are present in the document.
               <strong
                 >If no tags are present, the file is absolutely not
                 accessible.</strong
               >
-              This check doesn't determine if existing tags are correct.
+              This check doesn&rsquo;t determine if existing tags are correct.
             </p>
             <h4>Possible tagged values:</h4>
-            <p class="flag success">
-              <span>Tagged</span> <strong>Yes (# tags)</strong>
+            <p class="flag" data-status="success">
+              <strong>Tagged</strong> <span>Yes (# tags)</span>
             </p>
-            <p class="flag failure"><span>Tagged</span> <strong>No</strong></p>
+            <p class="flag" data-status="failure">
+              <strong>Tagged</strong> <span>No</span>
+            </p>
           </article>
-          <article>
-            <h3 id="help-language" tabindex="-1">Language</h3>
+          <article id="help-language" tabindex="-1">
+            <h3>Language</h3>
             <p>
-              All documents should have the language attribute set. Correct
-              values for English documents are <strong>(en)</strong> or
+              All documents should have the language attribute set. For example,
+              a document primarily in U.S. English should use
               <strong>(en-US)</strong>.
             </p>
             <p>
@@ -311,28 +458,28 @@
               down
             </p>
             <h4>Possible language values:</h4>
-            <p class="flag success">
-              <span>Language</span> <strong>(Language abbreviation)</strong>
+            <p class="flag" data-status="success">
+              <strong>Language</strong> <span>(Language abbreviation)</span>
             </p>
-            <p class="flag failure">
-              <span>Language</span> <strong>Not set</strong>
+            <p class="flag" data-status="failure">
+              <strong>Language</strong> <span>Not set</span>
             </p>
           </article>
-          <article>
-            <h3 id="help-marked" tabindex="-1">Marked</h3>
-            <p>
-              In the
-              <a
-                href="https://web.archive.org/web/20210211033910/https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/PDF32000_2008.pdf"
-                >official ISO PDF-1.7 specification [PDF - 9 MB]</a
-              >, on page 574:
-            </p>
+          <article id="help-marked" tabindex="-1">
+            <h3>Marked</h3>
             <blockquote>
               <p>
                 A Tagged PDF document shall also contain a mark information
                 dictionary (see Table 321) with a value of true for the Marked
                 entry.
               </p>
+              —
+              <cite
+                ><a
+                  href="https://web.archive.org/web/20210211033910/https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/PDF32000_2008.pdf"
+                  >ISO PDF-1.7 specification, page 574 [PDF - 9 MB]</a
+                ></cite
+              >
             </blockquote>
             <p>
               <a
@@ -341,29 +488,32 @@
               >.
             </p>
             <h4>Possible marked values:</h4>
-            <p class="flag success">
-              <span>Marked</span> <strong>True</strong>
+            <p class="flag" data-status="success">
+              <strong>Marked</strong> <span>True</span>
             </p>
-            <p class="flag warning">
-              <span>Marked</span> <strong>False</strong>
+            <p class="flag" data-status="warning">
+              <strong>Marked</strong> <span>False</span>
             </p>
-            <p class="flag failure"><span>Marked</span> <strong>No</strong></p>
+            <p class="flag" data-status="failure">
+              <strong>Marked</strong> <span>No</span>
+            </p>
           </article>
-          <article>
-            <h3 id="help-pdfua" tabindex="-1">PDF/UA identifier</h3>
-            <p>
-              This checkpoint isn&rsquo;t a deal breaker. From
-              <a
-                href="https://taggedpdf.com/508-pdf-help-center/pdfua-identifier-missing/"
-                >taggedpdf.com</a
-              >:
-            </p>
+          <article id="help-pdfua" tabindex="-1">
+            <h3>PDF/UA identifier</h3>
+            <p>This checkpoint isn&rsquo;t a deal breaker.</p>
             <blockquote>
               <p>
                 The PDF/UA ID attests that the PDF is ISO 14289 (PDF/UA)
                 compliant. It should be added as the final remediation step;
                 otherwise you would kind of be fibbing.
               </p>
+              —
+              <cite
+                ><a
+                  href="https://taggedpdf.com/508-pdf-help-center/pdfua-identifier-missing/"
+                  >TaggedPDF.com: PDF/UA Identifier Missing</a
+                >
+              </cite>
             </blockquote>
             <p>
               <a href="https://www.youtube.com/watch?v=OCbaSQ73zn0"
@@ -372,34 +522,32 @@
               >.
             </p>
             <h4>Possible PDF/UA identifier values:</h4>
-            <p class="flag success">
-              <span>PDF/UA identifier</span> <strong>Yes</strong>
+            <p class="flag" data-status="success">
+              <strong>PDF/UA identifier</strong> <span>Yes</span>
             </p>
-            <p class="flag warning">
-              <span>PDF/UA identifier</span> <strong>Not set</strong>
+            <p class="flag" data-status="warning">
+              <strong>PDF/UA identifier</strong> <span>Not set</span>
             </p>
           </article>
-          <article>
-            <h3 id="help-title" tabindex="-1">Document Title</h3>
+          <article id="help-title" tabindex="-1">
+            <h3>Document Title</h3>
             <p>
               A conformant PDF will have a readable title specified in File
               &rarr; Properties.
             </p>
             <h4>Possible document title values:</h4>
-            <p class="flag success">
-              <span>Document Title</span> <strong>Document title</strong>
+            <p class="flag" data-status="success">
+              <strong>Document Title</strong> <span>Document title</span>
             </p>
-            <p class="flag warning">
-              <span>Document Title</span> <strong>Empty</strong>
+            <p class="flag" data-status="warning">
+              <strong>Document Title</strong> <span>Empty</span>
             </p>
-            <p class="flag warning">
-              <span>Document Title</span> <strong>Not set</strong>
+            <p class="flag" data-status="warning">
+              <strong>Document Title</strong> <span>Not set</span>
             </p>
           </article>
-          <article>
-            <h3 id="help-display-title" tabindex="-1">
-              Display Document Title
-            </h3>
+          <article id="help-display-title" tabindex="-1">
+            <h3>Display Document Title</h3>
             <p>
               When enabled, PDF viewers will display the document title in the
               title bar instead of the filename.
@@ -410,22 +558,22 @@
               Title&rdquo;
             </p>
             <h4>Possible display document title values:</h4>
-            <p class="flag success">
-              <span>Display Document Title</span> <strong>Enabled</strong>
+            <p class="flag" data-status="success">
+              <strong>Display Document Title</strong> <span>Enabled</span>
             </p>
-            <p class="flag warning">
-              <span>Display Document Title</span> <strong>Disabled</strong>
+            <p class="flag" data-status="warning">
+              <strong>Display Document Title</strong> <span>Disabled</span>
             </p>
-            <p class="flag warning">
-              <span>Display Document Title</span>
-              <strong>Not configured</strong>
+            <p class="flag" data-status="warning">
+              <strong>Display Document Title</strong>
+              <span>Not configured</span>
             </p>
           </article>
         </section>
       </div>
     </main>
 
-    <footer>
+    <footer class="footer">
       <p>
         MIT Licensed. Read the
         <a href="https://jasonmorris.com/code/pdfcheck/">PDFcheck blog post</a>.

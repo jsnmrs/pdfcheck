@@ -1,6 +1,15 @@
 (function pdfCheck() {
   // Utility functions for UI updates and event handling
   const ui = {
+    announceStatus: function (message) {
+      const announcer = document.getElementById("announce");
+      if (announcer) {
+        announcer.textContent = message;
+        setTimeout(() => {
+          announcer.textContent = "";
+        }, 2000); // Clear announce region after 2 seconds
+      }
+    },
     showFiles: function (files) {
       const label = document.querySelector("#dropzone label");
       const fileName =
@@ -25,7 +34,8 @@
     },
     addFlag: function (className, content, isHTML = false) {
       const tempNode = document.createElement("p");
-      tempNode.className = `flag ${className}`;
+      tempNode.className = "flag";
+      tempNode.dataset.status = className;
 
       if (isHTML) {
         // Parse the HTML string safely
@@ -48,25 +58,20 @@
       valueText,
     ) {
       const tempNode = document.createElement("p");
-      tempNode.className = `flag ${className}`;
+      tempNode.className = "flag";
+      tempNode.dataset.status = className;
 
-      const span = document.createElement("span");
-      if (linkHref) {
-        const link = document.createElement("a");
-        link.href = linkHref;
-        link.textContent = linkText;
-        span.appendChild(link);
-      } else {
-        span.textContent = labelText;
-      }
-      tempNode.appendChild(span);
+      const strong = document.createElement("strong");
+      strong.textContent = labelText;
+      tempNode.appendChild(strong);
 
       tempNode.appendChild(document.createTextNode(" "));
 
-      const strong = document.createElement("strong");
-      strong.textContent = valueText;
-      tempNode.appendChild(strong);
+      const span = document.createElement("span");
+      span.textContent = valueText;
+      tempNode.appendChild(span);
 
+      document.querySelectorAll(".example-result").forEach((el) => el.remove());
       document.getElementById("report").appendChild(tempNode);
     },
   };
@@ -99,15 +104,15 @@
           file.name.toLowerCase().endsWith(".pdf");
 
         if (!isPDF) {
-          ui.addFlag(
-            "failure",
-            `<strong>Not a PDF file: ${file.name}</strong>`,
-          );
+          ui.addFlag("failure", `${file.name} is not a PDF file.`);
         }
         return isPDF;
       });
 
       if (pdfFiles.length > 0) {
+        const fileCount = pdfFiles.length;
+        const pluralFiles = fileCount === 1 ? "file" : "files";
+        ui.announceStatus(`Running checks on ${fileCount} ${pluralFiles}`);
         this.readMultiFiles(pdfFiles);
       }
     },
@@ -139,19 +144,20 @@
 
         // Double-check file type before reading
         if (!file.name.toLowerCase().endsWith(".pdf")) {
-          ui.addFlag(
-            "failure",
-            `<strong>Skipping non-PDF: ${file.name}</strong>`,
-          );
+          ui.addFlag("failure", `${file.name} is not a PDF file.`);
           continue;
         }
 
         try {
           const fileData = await this.readFileAsync(file);
           this.runCheck(file, fileData, i + 1);
+          ui.announceStatus(
+            `Completed checking files. Read forward for results.`,
+          );
         } catch (error) {
           console.error("File read error:", error);
           ui.addFlag("failure", `Error reading file: ${file.name}`);
+          ui.announceStatus(`Error reading files. Read forward for details.`);
         }
       }
     },
@@ -284,9 +290,9 @@
     }
     ui.addFlagWithLink(
       "default",
-      "PDF Version:",
+      "PDF Version",
       null,
-      "PDF Version:",
+      "PDF Version",
       matchHeader[1],
     );
     return true;
@@ -531,8 +537,7 @@
     const fileLabel = `[${fileExt} - ${fileSize}${fileSizeSuffix}]`;
 
     // Create the heading safely
-    const tempNode = document.createElement("p");
-    tempNode.className = "flag title";
+    const tempNode = document.createElement("h3");
     tempNode.appendChild(
       document.createTextNode(`${fileNumber}. ${file.name} `),
     );
