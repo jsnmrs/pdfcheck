@@ -89,7 +89,7 @@ jobs:
 
       - name: Post comment to PR
         if: github.event_name == 'pull_request' && steps.check_files.outputs.accessibility_scan_triggers == 'true'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
