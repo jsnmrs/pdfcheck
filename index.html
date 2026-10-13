@@ -641,6 +641,89 @@
               <span>Form present (fields could not be inspected)</span>
             </p>
           </div>
+          <div class="test" id="help-structure" tabindex="-1">
+            <h3>Structure</h3>
+            <p>
+              The checks for headings, lists, tables, and figures read the tag
+              tree as plain text. Many tools, including Acrobat and Word, store
+              the tag tree in compressed object streams that PDFcheck
+              can&rsquo;t open. When that happens this flag appears instead of
+              those checks. It says nothing about whether the tags are good or
+              bad, so open the file in PAC or Acrobat to inspect them.
+            </p>
+            <h4>Possible structure values:</h4>
+            <p class="flag" data-status="default">
+              <strong>Structure</strong>
+              <span>Could not inspect (compressed structure tree)</span>
+            </p>
+          </div>
+          <div class="test" id="help-headings" tabindex="-1">
+            <h3>Headings</h3>
+            <p>
+              Headings give screen reader users a way to skim and jump through
+              the document, and every document should start with an H1. This
+              check counts heading tags by level and flags a missing H1. It
+              doesn&rsquo;t check whether levels are skipped or whether the text
+              makes sense as a heading.
+            </p>
+            <h4>Possible headings values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Headings</strong> <span>H1: 1, H2: 3, H3: 2</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>Headings</strong> <span>No H1 (H2: 3, H3: 2)</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>Headings</strong> <span>None found</span>
+            </p>
+          </div>
+          <div class="test" id="help-lists" tabindex="-1">
+            <h3>Lists</h3>
+            <p>
+              Tagged lists tell assistive technology how many items there are
+              and where each one starts. This check counts list and list item
+              tags and only appears when the file has at least one list.
+            </p>
+            <h4>Possible lists values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Lists</strong> <span>2 lists, 7 items</span>
+            </p>
+          </div>
+          <div class="test" id="help-tables" tabindex="-1">
+            <h3>Tables</h3>
+            <p>
+              Data tables need header cells (TH tags) so a screen reader can
+              announce the row or column each cell belongs to. This check counts
+              table and header cell tags and only appears when the file has at
+              least one table. It can&rsquo;t tell whether the headers are
+              attached to the right cells.
+            </p>
+            <h4>Possible tables values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Tables</strong> <span>2 tables, 8 header cells</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>Tables</strong> <span>2 tables, no header cells</span>
+            </p>
+          </div>
+          <div class="test" id="help-figures" tabindex="-1">
+            <h3>Figures</h3>
+            <p>
+              Each figure tag needs alternative text (the Alt entry) that
+              describes the image. This check counts figure tags and alt text
+              entries across the whole file. It can&rsquo;t match an entry to a
+              specific figure or judge whether the text is useful. The check
+              only appears when the file has at least one figure.
+            </p>
+            <h4>Possible figures values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Figures</strong>
+              <span>3 figures, 3 alt text entries</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>Figures</strong> <span>3 figures, 1 alt text entry</span>
+            </p>
+          </div>
         </section>
       </div>
     </main>

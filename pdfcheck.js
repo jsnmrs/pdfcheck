@@ -163,6 +163,7 @@
     },
     runCheck: function (file, fileData, fileNumber) {
       let valid;
+      let tagged = false;
 
       try {
         buildHeading(file, fileNumber);
@@ -194,7 +195,7 @@
           }
 
           try {
-            findTags(fileData);
+            tagged = findTags(fileData);
           } catch (error) {
             console.error("Error finding tags:", error);
           }
@@ -227,6 +228,14 @@
             findBookmarks(fileData);
           } catch (error) {
             console.error("Error finding bookmarks:", error);
+          }
+
+          if (tagged) {
+            try {
+              findStructure(fileData);
+            } catch (error) {
+              console.error("Error finding structure:", error);
+            }
           }
 
           try {
@@ -340,9 +349,10 @@
         "Tagged",
         `Yes (${matchTree[1]} tags)`,
       );
-    } else {
-      ui.addFlagWithLink("failure", "Tagged", "#help-tagged", "Tagged", "No");
+      return true;
     }
+    ui.addFlagWithLink("failure", "Tagged", "#help-tagged", "Tagged", "No");
+    return false;
   }
 
   // Check if Lang is set, display value if set
@@ -440,6 +450,119 @@
         "Not set",
       );
     }
+  }
+
+  // Check whether structure elements are readable as plain text. Many
+  // producers store the tag tree in compressed object streams, which the
+  // regex checks can't see into.
+  function canInspectStructure(fileData) {
+    const regexStructure =
+      /\/S\s*\/(Document|Part|Art|Sect|Div|P|H[1-6]|L|LI|Table|Figure|Span)\b/;
+    return regexStructure.test(fileData);
+  }
+
+  // Run the structure checks when the tag tree is readable
+  function findStructure(fileData) {
+    if (!canInspectStructure(fileData)) {
+      ui.addFlagWithLink(
+        "default",
+        "Structure",
+        null,
+        "Structure",
+        "Could not inspect (compressed structure tree)",
+      );
+      return;
+    }
+
+    [findHeadings, findLists, findTables, findFigures].forEach((check) => {
+      try {
+        check(fileData);
+      } catch (error) {
+        console.error(`Error in ${check.name}:`, error);
+      }
+    });
+  }
+
+  // Count heading tags by level and flag a missing H1
+  function findHeadings(fileData) {
+    const counts = [];
+    for (let level = 1; level <= 6; level++) {
+      const regexLevel = new RegExp(`\\/S\\s*\\/H${level}\\b`, "g");
+      const count = countMatches(fileData, regexLevel);
+      if (count > 0) {
+        counts.push(`H${level}: ${count}`);
+      }
+    }
+
+    if (counts.length === 0) {
+      ui.addFlagWithLink("warning", "Headings", null, "Headings", "None found");
+      return;
+    }
+
+    const hasH1 = counts[0].startsWith("H1:");
+    ui.addFlagWithLink(
+      hasH1 ? "success" : "warning",
+      "Headings",
+      null,
+      "Headings",
+      hasH1 ? counts.join(", ") : `No H1 (${counts.join(", ")})`,
+    );
+  }
+
+  // Count list tags and their items, shown only when a list exists
+  function findLists(fileData) {
+    const listCount = countMatches(fileData, /\/S\s*\/L\b/g);
+    if (listCount === 0) {
+      return;
+    }
+
+    const itemCount = countMatches(fileData, /\/S\s*\/LI\b/g);
+    ui.addFlagWithLink(
+      "success",
+      "Lists",
+      null,
+      "Lists",
+      `${pluralize(listCount, "list")}, ${pluralize(itemCount, "item")}`,
+    );
+  }
+
+  // Count table tags and flag tables without header cells
+  function findTables(fileData) {
+    const tableCount = countMatches(fileData, /\/S\s*\/Table\b/g);
+    if (tableCount === 0) {
+      return;
+    }
+
+    const headerCount = countMatches(fileData, /\/S\s*\/TH\b/g);
+    const headerText =
+      headerCount > 0
+        ? pluralize(headerCount, "header cell")
+        : "no header cells";
+    ui.addFlagWithLink(
+      headerCount > 0 ? "success" : "warning",
+      "Tables",
+      null,
+      "Tables",
+      `${pluralize(tableCount, "table")}, ${headerText}`,
+    );
+  }
+
+  // Count figure tags and compare with alt text entries
+  function findFigures(fileData) {
+    const figureCount = countMatches(fileData, /\/S\s*\/Figure\b/g);
+    if (figureCount === 0) {
+      return;
+    }
+
+    const altCount = countMatches(fileData, /\/Alt\s*[(<]/g);
+    const altText = `${altCount} alt text ${altCount === 1 ? "entry" : "entries"}`;
+    ui.addFlagWithLink(
+      altCount >= figureCount ? "success" : "warning",
+      "Figures",
+      null,
+      "Figures",
+      `${pluralize(figureCount, "figure")}, ${altText}`,
+    );
   }
 
   // Check for an outline (bookmarks) reference in the catalog
