@@ -10,7 +10,7 @@ This tool does not validate the accessibility of PDFs and is not intended to be 
 - **Batch Processing**: Analyze multiple PDF files simultaneously
 - **Drag & Drop Support**: Easy file uploading through drag and drop interface
 - **Extensive Checks**: Evaluates multiple criteria:
-  - PDF tagging status and tag count
+  - PDF tagging status
   - Document language settings
   - PDF/UA identifier presence
   - Document title properties
@@ -30,7 +30,6 @@ This tool does not validate the accessibility of PDFs and is not intended to be 
 Verifies if the PDF contains proper structural tags, which are essential for accessibility. The tool:
 
 - Detects the presence of `StructTreeRoot`
-- Counts the number of tags if present
 - Clearly indicates if a document is untagged
 
 ### Language Settings
@@ -72,7 +71,7 @@ Examines critical document metadata:
 3. **Understanding Results**
    Each PDF is analyzed for:
    - PDF version
-   - Tag status and count
+   - Tag status
    - Language settings
    - PDF/UA identifier
    - Document title
@@ -94,7 +93,7 @@ Examines critical document metadata:
 PDFcheck displays results with color-coded indicators for quick assessment:
 
 - **Success (Green background)**: Indicates the check passed successfully
-  - Tagged: Yes (with tag count)
+  - Tagged: Yes
   - Language: Set with valid code (e.g., en-US)
   - Marked: True
   - PDF/UA identifier: Yes

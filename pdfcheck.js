@@ -400,19 +400,12 @@
     return true;
   }
 
-  // Check if StructTreeRoot is set and count tags
+  // Check if StructTreeRoot is set
   function findTags(fileData) {
-    const regexTree = /StructTreeRoot\s(\d*)\s(\d*)/;
-    const matchTree = regexTree.exec(fileData);
+    const regexTree = /\/StructTreeRoot\s+\d+\s+\d+\s+R/;
 
-    if (matchTree) {
-      ui.addFlagWithLink(
-        "success",
-        "Tagged",
-        "#help-tagged",
-        "Tagged",
-        `Yes (${matchTree[1]} tags)`,
-      );
+    if (regexTree.test(fileData)) {
+      ui.addFlagWithLink("success", "Tagged", "#help-tagged", "Tagged", "Yes");
       return true;
     }
     ui.addFlagWithLink("failure", "Tagged", "#help-tagged", "Tagged", "No");
