@@ -212,6 +212,12 @@
           }
 
           try {
+            findSuspects(fileData);
+          } catch (error) {
+            console.error("Error finding suspects:", error);
+          }
+
+          try {
             findUA(fileData);
           } catch (error) {
             console.error("Error finding UA:", error);
@@ -288,12 +294,23 @@
       ui.addFlagWithLink("default", "", null, "", "Not a valid PDF file");
       return false;
     }
+
+    // The catalog can raise the version above the header value
+    const regexVersion = /\/Version\s*\/(\d\.\d)/;
+    const matchVersion = regexVersion.exec(fileData);
+    let version = matchHeader[1];
+    if (matchVersion && parseFloat(matchVersion[1]) > parseFloat(version)) {
+      version = matchVersion[1];
+    }
+
+    // PDF/UA-1 requires PDF 1.7 or later
+    const meetsPDFUA = parseFloat(version) >= 1.7;
     ui.addFlagWithLink(
-      "default",
+      meetsPDFUA ? "default" : "warning",
       "PDF Version",
       null,
       "PDF Version",
-      matchHeader[1],
+      meetsPDFUA ? version : `${version} (PDF/UA requires 1.7 or later)`,
     );
     return true;
   }
@@ -369,6 +386,14 @@
       );
     } else {
       ui.addFlagWithLink("failure", "Marked", "#help-marked", "Marked", "No");
+    }
+  }
+
+  // Check for Suspects flag in MarkInfo, shown only when true
+  function findSuspects(fileData) {
+    const regexSuspects = /\/Suspects\s+true/;
+    if (regexSuspects.test(fileData)) {
+      ui.addFlagWithLink("warning", "Suspects", null, "Suspects", "True");
     }
   }
 

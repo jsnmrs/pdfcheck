@@ -569,6 +569,37 @@
               <span>Not configured</span>
             </p>
           </div>
+          <div class="test" id="help-version" tabindex="-1">
+            <h3>PDF Version</h3>
+            <p>
+              PDF/UA (ISO 14289-1), the accessibility standard for PDF, builds
+              on PDF 1.7. A file with an earlier version can still be tagged and
+              usable, so this isn&rsquo;t a deal breaker on its own. Saving the
+              file again from a current tool usually updates the version.
+            </p>
+            <h4>Possible PDF version values:</h4>
+            <p class="flag" data-status="default">
+              <strong>PDF Version</strong> <span>1.7</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>PDF Version</strong>
+              <span>1.4 (PDF/UA requires 1.7 or later)</span>
+            </p>
+          </div>
+          <div class="test" id="help-suspects" tabindex="-1">
+            <h3>Suspects</h3>
+            <p>
+              The Suspects entry in the mark information dictionary means the
+              producer found content it couldn&rsquo;t tag with confidence.
+              Acrobat sets it after some auto-tagging and OCR steps. Review the
+              tags before trusting them. This check only appears when the flag
+              is set.
+            </p>
+            <h4>Possible suspects values:</h4>
+            <p class="flag" data-status="warning">
+              <strong>Suspects</strong> <span>True</span>
+            </p>
+          </div>
         </section>
       </div>
     </main>
