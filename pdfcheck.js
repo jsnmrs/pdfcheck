@@ -69,13 +69,7 @@
       });
       document.getElementById("report").appendChild(tempNode);
     },
-    addFlagWithLink: function (
-      className,
-      labelText,
-      linkHref,
-      linkText,
-      valueText,
-    ) {
+    addLabeledFlag: function (className, labelText, valueText) {
       const tempNode = document.createElement("p");
       tempNode.className = "flag";
       tempNode.dataset.status = className;
@@ -376,7 +370,7 @@
     const matchHeader = regexHeader.exec(dataHeader);
 
     if (!matchHeader) {
-      ui.addFlagWithLink("default", "", null, "", "Not a valid PDF file");
+      ui.addLabeledFlag("default", "", "Not a valid PDF file");
       return false;
     }
 
@@ -390,10 +384,8 @@
 
     // PDF/UA-1 requires PDF 1.7 or later
     const meetsPDFUA = parseFloat(version) >= 1.7;
-    ui.addFlagWithLink(
+    ui.addLabeledFlag(
       meetsPDFUA ? "default" : "warning",
-      "PDF Version",
-      null,
       "PDF Version",
       meetsPDFUA ? version : `${version} (PDF/UA requires 1.7 or later)`,
     );
@@ -405,10 +397,10 @@
     const regexTree = /\/StructTreeRoot\s+\d+\s+\d+\s+R/;
 
     if (regexTree.test(fileData)) {
-      ui.addFlagWithLink("success", "Tagged", "#help-tagged", "Tagged", "Yes");
+      ui.addLabeledFlag("success", "Tagged", "Yes");
       return true;
     }
-    ui.addFlagWithLink("failure", "Tagged", "#help-tagged", "Tagged", "No");
+    ui.addLabeledFlag("failure", "Tagged", "No");
     return false;
   }
 
@@ -424,21 +416,9 @@
         languageCode = decodeHex(languageCode);
       }
 
-      ui.addFlagWithLink(
-        "success",
-        "Language",
-        "#help-language",
-        "Language",
-        languageCode,
-      );
+      ui.addLabeledFlag("success", "Language", languageCode);
     } else {
-      ui.addFlagWithLink(
-        "failure",
-        "Language",
-        "#help-language",
-        "Language",
-        "not set",
-      );
+      ui.addLabeledFlag("failure", "Language", "not set");
     }
   }
 
@@ -466,15 +446,13 @@
     const matchMarked = regexMarked.exec(fileData);
     if (matchMarked) {
       const isMarked = matchMarked[1] === "true";
-      ui.addFlagWithLink(
+      ui.addLabeledFlag(
         isMarked ? "success" : "warning",
-        "Marked",
-        "#help-marked",
         "Marked",
         isMarked ? "True" : "False",
       );
     } else {
-      ui.addFlagWithLink("failure", "Marked", "#help-marked", "Marked", "No");
+      ui.addLabeledFlag("failure", "Marked", "No");
     }
   }
 
@@ -482,7 +460,7 @@
   function findSuspects(fileData) {
     const regexSuspects = /\/Suspects\s+true/;
     if (regexSuspects.test(fileData)) {
-      ui.addFlagWithLink("warning", "Suspects", null, "Suspects", "True");
+      ui.addLabeledFlag("warning", "Suspects", "True");
     }
   }
 
@@ -491,21 +469,9 @@
     const regexPDFUA = /<pdfaSchema:prefix>pdfuaid<\/pdfaSchema:prefix>/;
     const matchPDFUA = regexPDFUA.exec(fileData);
     if (matchPDFUA) {
-      ui.addFlagWithLink(
-        "success",
-        "PDF/UA identifier",
-        "#help-pdfua",
-        "PDF/UA identifier",
-        "Yes",
-      );
+      ui.addLabeledFlag("success", "PDF/UA identifier", "Yes");
     } else {
-      ui.addFlagWithLink(
-        "warning",
-        "PDF/UA identifier",
-        "#help-pdfua",
-        "PDF/UA identifier",
-        "Not set",
-      );
+      ui.addLabeledFlag("warning", "PDF/UA identifier", "Not set");
     }
   }
 
@@ -521,10 +487,8 @@
   // Run the structure checks when the tag tree is readable
   function findStructure(fileData) {
     if (!canInspectStructure(fileData)) {
-      ui.addFlagWithLink(
+      ui.addLabeledFlag(
         "default",
-        "Structure",
-        null,
         "Structure",
         "Could not inspect (compressed structure tree)",
       );
@@ -552,15 +516,13 @@
     }
 
     if (counts.length === 0) {
-      ui.addFlagWithLink("warning", "Headings", null, "Headings", "None found");
+      ui.addLabeledFlag("warning", "Headings", "None found");
       return;
     }
 
     const hasH1 = counts[0].startsWith("H1:");
-    ui.addFlagWithLink(
+    ui.addLabeledFlag(
       hasH1 ? "success" : "warning",
-      "Headings",
-      null,
       "Headings",
       hasH1 ? counts.join(", ") : `No H1 (${counts.join(", ")})`,
     );
@@ -574,10 +536,8 @@
     }
 
     const itemCount = countMatches(fileData, /\/S\s*\/LI\b/g);
-    ui.addFlagWithLink(
+    ui.addLabeledFlag(
       "success",
-      "Lists",
-      null,
       "Lists",
       `${pluralize(listCount, "list")}, ${pluralize(itemCount, "item")}`,
     );
@@ -595,10 +555,8 @@
       headerCount > 0
         ? pluralize(headerCount, "header cell")
         : "no header cells";
-    ui.addFlagWithLink(
+    ui.addLabeledFlag(
       headerCount > 0 ? "success" : "warning",
-      "Tables",
-      null,
       "Tables",
       `${pluralize(tableCount, "table")}, ${headerText}`,
     );
@@ -613,10 +571,8 @@
 
     const altCount = countMatches(fileData, /\/Alt\s*[(<]/g);
     const altText = `${altCount} alt text ${altCount === 1 ? "entry" : "entries"}`;
-    ui.addFlagWithLink(
+    ui.addLabeledFlag(
       altCount >= figureCount ? "success" : "warning",
-      "Figures",
-      null,
       "Figures",
       `${pluralize(figureCount, "figure")}, ${altText}`,
     );
@@ -626,15 +582,9 @@
   function findBookmarks(fileData) {
     const regexOutlines = /\/Outlines\s+\d+\s+\d+\s+R/;
     if (regexOutlines.test(fileData)) {
-      ui.addFlagWithLink("success", "Bookmarks", null, "Bookmarks", "Present");
+      ui.addLabeledFlag("success", "Bookmarks", "Present");
     } else {
-      ui.addFlagWithLink(
-        "default",
-        "Bookmarks",
-        null,
-        "Bookmarks",
-        "Not found",
-      );
+      ui.addLabeledFlag("default", "Bookmarks", "Not found");
     }
   }
 
@@ -648,20 +598,16 @@
     const descriptionCount = countMatches(fileData, /\/TU\s*[(<]/g);
 
     if (fieldCount === 0) {
-      ui.addFlagWithLink(
+      ui.addLabeledFlag(
         "default",
-        "Form Fields",
-        null,
         "Form Fields",
         "Form present (fields could not be inspected)",
       );
       return;
     }
 
-    ui.addFlagWithLink(
+    ui.addLabeledFlag(
       descriptionCount >= fieldCount ? "success" : "warning",
-      "Form Fields",
-      null,
       "Form Fields",
       `${pluralize(fieldCount, "field")}, ${descriptionCount} with descriptions`,
     );
@@ -683,30 +629,12 @@
         const titleText = titleMatch
           ? titleMatch[1].trim()
           : matchTitle[1].trim();
-        ui.addFlagWithLink(
-          "default",
-          "Document Title",
-          "#help-title",
-          "Document Title",
-          titleText,
-        );
+        ui.addLabeledFlag("default", "Document Title", titleText);
       } else {
-        ui.addFlagWithLink(
-          "warning",
-          "Document Title",
-          "#help-title",
-          "Document Title",
-          "Empty",
-        );
+        ui.addLabeledFlag("warning", "Document Title", "Empty");
       }
     } else {
-      ui.addFlagWithLink(
-        "failure",
-        "Document Title",
-        "#help-title",
-        "Document Title",
-        "Not set",
-      );
+      ui.addLabeledFlag("failure", "Document Title", "Not set");
     }
   }
 
@@ -719,10 +647,8 @@
 
     if (matchDisplayTitle) {
       const isEnabled = matchDisplayTitle[1] === "true";
-      ui.addFlagWithLink(
+      ui.addLabeledFlag(
         isEnabled ? "success" : "warning",
-        "Display Document Title",
-        "#help-display-title",
         "Display Document Title",
         isEnabled ? "Enabled" : "Disabled",
       );
@@ -733,18 +659,14 @@
 
       if (matchAltFormat) {
         const isEnabled = matchAltFormat[1] === "true";
-        ui.addFlagWithLink(
+        ui.addLabeledFlag(
           isEnabled ? "success" : "warning",
-          "Display Document Title",
-          "#help-display-title",
           "Display Document Title",
           isEnabled ? "Enabled" : "Disabled",
         );
       } else {
-        ui.addFlagWithLink(
+        ui.addLabeledFlag(
           "warning",
-          "Display Document Title",
-          "#help-display-title",
           "Display Document Title",
           "Not configured",
         );
@@ -757,21 +679,9 @@
     const regexTitle = /<xmp:CreatorTool>([\s\S]*?)<\/xmp:CreatorTool>/;
     const matchTitle = regexTitle.exec(fileData);
     if (matchTitle && matchTitle[1].trim()) {
-      ui.addFlagWithLink(
-        "default",
-        "Creator Tool",
-        null,
-        "Creator Tool",
-        matchTitle[1].trim(),
-      );
+      ui.addLabeledFlag("default", "Creator Tool", matchTitle[1].trim());
     } else {
-      ui.addFlagWithLink(
-        "warning",
-        "Creator Tool",
-        null,
-        "Creator Tool",
-        "Not set",
-      );
+      ui.addLabeledFlag("warning", "Creator Tool", "Not set");
     }
   }
 
@@ -780,15 +690,9 @@
     const regexTitle = /<pdf:Producer>([\s\S]*?)<\/pdf:Producer>/;
     const matchTitle = regexTitle.exec(fileData);
     if (matchTitle && matchTitle[1].trim()) {
-      ui.addFlagWithLink(
-        "default",
-        "Producer",
-        null,
-        "Producer",
-        matchTitle[1].trim(),
-      );
+      ui.addLabeledFlag("default", "Producer", matchTitle[1].trim());
     } else {
-      ui.addFlagWithLink("warning", "Producer", null, "Producer", "Not set");
+      ui.addLabeledFlag("warning", "Producer", "Not set");
     }
   }
 
