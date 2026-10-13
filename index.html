@@ -150,6 +150,14 @@
       blockquote p {
         margin-block-end: 0.5em;
       }
+      .disclaimer {
+        background-color: var(--color-bg-default);
+        border: 1px solid var(--color-border);
+        border-inline-start: 0.35em solid var(--color-default);
+        color: var(--color-default);
+        padding-block: 0.65em;
+        padding-inline: 0.65em;
+      }
       small {
         padding-inline-start: 0.15em;
       }
@@ -315,6 +323,13 @@
               <a href="https://github.com/jsnmrs/pdfcheck/tree/main/examples"
                 >example PDF files from the GitHub repo to check</a
               >.
+            </p>
+            <p class="disclaimer">
+              PDFcheck looks for signs of inaccessibility. It can tell you a
+              feature is missing, but it can&rsquo;t tell you a feature is
+              correct. Treat it as a first pass before testing with
+              <a href="https://pac.pdf-accessibility.org/en">PAC 2024</a>,
+              Acrobat&rsquo;s accessibility checker, and a screen reader.
             </p>
 
             <form class="box" id="dropzone">
