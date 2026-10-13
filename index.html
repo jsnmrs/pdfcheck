@@ -81,7 +81,7 @@
         padding-block: 0.25em;
         padding-inline: 1em;
       }
-      article {
+      .test {
         margin-block-end: 2.5em;
       }
       h1 {
@@ -427,7 +427,7 @@
         <section class="help" aria-labelledby="tests">
           <h2 id="tests" tabindex="-1">Tests</h2>
           <p><span id="learn">Learn more about </span>the tests and results.</p>
-          <article id="help-tagged" tabindex="-1">
+          <div class="test" id="help-tagged" tabindex="-1">
             <h3>Tagged</h3>
             <p>
               This check indicates that tags are present in the document.
@@ -444,8 +444,8 @@
             <p class="flag" data-status="failure">
               <strong>Tagged</strong> <span>No</span>
             </p>
-          </article>
-          <article id="help-language" tabindex="-1">
+          </div>
+          <div class="test" id="help-language" tabindex="-1">
             <h3>Language</h3>
             <p>
               All documents should have the language attribute set. For example,
@@ -464,8 +464,8 @@
             <p class="flag" data-status="failure">
               <strong>Language</strong> <span>Not set</span>
             </p>
-          </article>
-          <article id="help-marked" tabindex="-1">
+          </div>
+          <div class="test" id="help-marked" tabindex="-1">
             <h3>Marked</h3>
             <blockquote>
               <p>
@@ -497,8 +497,8 @@
             <p class="flag" data-status="failure">
               <strong>Marked</strong> <span>No</span>
             </p>
-          </article>
-          <article id="help-pdfua" tabindex="-1">
+          </div>
+          <div class="test" id="help-pdfua" tabindex="-1">
             <h3>PDF/UA identifier</h3>
             <p>This checkpoint isn&rsquo;t a deal breaker.</p>
             <blockquote>
@@ -528,8 +528,8 @@
             <p class="flag" data-status="warning">
               <strong>PDF/UA identifier</strong> <span>Not set</span>
             </p>
-          </article>
-          <article id="help-title" tabindex="-1">
+          </div>
+          <div class="test" id="help-title" tabindex="-1">
             <h3>Document Title</h3>
             <p>
               A conformant PDF will have a readable title specified in File
@@ -545,8 +545,8 @@
             <p class="flag" data-status="warning">
               <strong>Document Title</strong> <span>Not set</span>
             </p>
-          </article>
-          <article id="help-display-title" tabindex="-1">
+          </div>
+          <div class="test" id="help-display-title" tabindex="-1">
             <h3>Display Document Title</h3>
             <p>
               When enabled, PDF viewers will display the document title in the
@@ -568,7 +568,7 @@
               <strong>Display Document Title</strong>
               <span>Not configured</span>
             </p>
-          </article>
+          </div>
         </section>
       </div>
     </main>
