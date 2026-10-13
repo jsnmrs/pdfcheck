@@ -469,7 +469,7 @@
 
   // Check MarkInfo exists and whether true or false
   function findMark(fileData) {
-    const regexMarked = /<<\/Marked (true|false)/;
+    const regexMarked = /\/Marked\s+(true|false)/;
     const matchMarked = regexMarked.exec(fileData);
     if (matchMarked) {
       const isMarked = matchMarked[1] === "true";
