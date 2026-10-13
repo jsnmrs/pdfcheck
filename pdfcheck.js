@@ -1,4 +1,8 @@
 (function pdfCheck() {
+  // Results collected for CSV export, one entry per flag
+  let results = [];
+  let currentFile = "";
+
   // Utility functions for UI updates and event handling
   const ui = {
     announceStatus: function (message) {
@@ -31,6 +35,15 @@
     },
     clearReport: function () {
       document.getElementById("report").textContent = "";
+      results = [];
+      currentFile = "";
+      this.toggleExportButton(false);
+    },
+    toggleExportButton: function (show) {
+      const button = document.getElementById("export-csv");
+      if (button) {
+        button.hidden = !show;
+      }
     },
     addFlag: function (className, content, isHTML = false) {
       const tempNode = document.createElement("p");
@@ -48,6 +61,12 @@
         tempNode.textContent = content;
       }
 
+      results.push({
+        file: "",
+        check: "File",
+        result: content,
+        status: className,
+      });
       document.getElementById("report").appendChild(tempNode);
     },
     addFlagWithLink: function (
@@ -71,6 +90,12 @@
       span.textContent = valueText;
       tempNode.appendChild(span);
 
+      results.push({
+        file: currentFile,
+        check: labelText,
+        result: valueText,
+        status: className,
+      });
       document.querySelectorAll(".example-result").forEach((el) => el.remove());
       document.getElementById("report").appendChild(tempNode);
     },
@@ -160,6 +185,8 @@
           ui.announceStatus(`Error reading files. Read forward for details.`);
         }
       }
+
+      ui.toggleExportButton(results.length > 0);
     },
     runCheck: function (file, fileData, fileNumber) {
       let valid;
@@ -289,6 +316,43 @@
     // Firefox focus bug fix for file input
     input.addEventListener("focus", () => input.classList.add("has-focus"));
     input.addEventListener("blur", () => input.classList.remove("has-focus"));
+
+    const exportButton = document.getElementById("export-csv");
+    if (exportButton) {
+      exportButton.addEventListener("click", exportResults);
+    }
+  }
+
+  // Build a CSV of every result and download it
+  function exportResults() {
+    const rows = [["File", "Check", "Result", "Status"]].concat(
+      results.map((entry) => [
+        entry.file,
+        entry.check,
+        entry.result,
+        entry.status,
+      ]),
+    );
+    const csv = rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
+    // Leading byte order mark so spreadsheets read accented characters correctly
+    const blob = new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "pdfcheck-results.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+    ui.announceStatus("Downloaded results as CSV");
+  }
+
+  // Quote a CSV cell. A value that starts with a formula character gets a
+  // leading apostrophe so a spreadsheet shows it as text instead of running it.
+  function csvCell(value) {
+    let text = String(value ?? "");
+    if (/^[=+\-@]/.test(text)) {
+      text = `'${text}`;
+    }
+    return `"${text.replace(/"/g, '""')}"`;
   }
 
   // Utility function to check for advanced upload features
@@ -737,6 +801,7 @@
 
   // Build file heading - ex: 1. document.pdf [PDF - 236 KB]
   function buildHeading(file, fileNumber) {
+    currentFile = file.name;
     const fileExt = file.name.split(".").pop().toUpperCase();
     let fileSize = file.size / 1024; // KB as default unit
     let fileSizeSuffix = "KB";
