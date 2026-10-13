@@ -600,6 +600,47 @@
               <strong>Suspects</strong> <span>True</span>
             </p>
           </div>
+          <div class="test" id="help-bookmarks" tabindex="-1">
+            <h3>Bookmarks</h3>
+            <p>
+              Bookmarks (the outline shown in a viewer&rsquo;s side panel) let
+              people jump to a section without paging through the document.
+              Common federal guidance, including the HHS checklist, calls for
+              bookmarks in documents of 9 or more pages. PDFcheck can&rsquo;t
+              read the page count reliably, so a missing outline is shown as
+              information rather than a warning.
+            </p>
+            <h4>Possible bookmarks values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Bookmarks</strong> <span>Present</span>
+            </p>
+            <p class="flag" data-status="default">
+              <strong>Bookmarks</strong> <span>Not found</span>
+            </p>
+          </div>
+          <div class="test" id="help-forms" tabindex="-1">
+            <h3>Form Fields</h3>
+            <p>
+              Each form field needs a description (the tooltip, stored as TU) so
+              a screen reader can announce what to type or choose. This check
+              only appears when the file has a form. Fields are counted from
+              uncompressed field dictionaries, and radio button and checkbox
+              groups can make the count approximate.
+            </p>
+            <h4>Possible form fields values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Form Fields</strong>
+              <span>2 fields, 2 with descriptions</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>Form Fields</strong>
+              <span>5 fields, 2 with descriptions</span>
+            </p>
+            <p class="flag" data-status="default">
+              <strong>Form Fields</strong>
+              <span>Form present (fields could not be inspected)</span>
+            </p>
+          </div>
         </section>
       </div>
     </main>

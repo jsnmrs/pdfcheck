@@ -222,6 +222,18 @@
           } catch (error) {
             console.error("Error finding UA:", error);
           }
+
+          try {
+            findBookmarks(fileData);
+          } catch (error) {
+            console.error("Error finding bookmarks:", error);
+          }
+
+          try {
+            findFormFields(fileData);
+          } catch (error) {
+            console.error("Error finding form fields:", error);
+          }
         }
       } catch (error) {
         console.error("Error during PDF validation:", error);
@@ -363,6 +375,16 @@
     }
   }
 
+  // Helper function to count regex matches in the file data
+  function countMatches(fileData, regex) {
+    return (fileData.match(regex) || []).length;
+  }
+
+  // Helper function to format a count with a singular or plural noun
+  function pluralize(count, noun) {
+    return `${count} ${noun}${count === 1 ? "" : "s"}`;
+  }
+
   // Helper function to decode hex string to ASCII
   function decodeHex(hexString) {
     const hexCodePairs = hexString.match(/.{1,2}/g);
@@ -418,6 +440,51 @@
         "Not set",
       );
     }
+  }
+
+  // Check for an outline (bookmarks) reference in the catalog
+  function findBookmarks(fileData) {
+    const regexOutlines = /\/Outlines\s+\d+\s+\d+\s+R/;
+    if (regexOutlines.test(fileData)) {
+      ui.addFlagWithLink("success", "Bookmarks", null, "Bookmarks", "Present");
+    } else {
+      ui.addFlagWithLink(
+        "default",
+        "Bookmarks",
+        null,
+        "Bookmarks",
+        "Not found",
+      );
+    }
+  }
+
+  // Check form fields for descriptions (TU, the tooltip screen readers announce)
+  function findFormFields(fileData) {
+    if (!/\/AcroForm/.test(fileData)) {
+      return;
+    }
+
+    const fieldCount = countMatches(fileData, /\/FT\s*\/(Tx|Btn|Ch|Sig)\b/g);
+    const descriptionCount = countMatches(fileData, /\/TU\s*[(<]/g);
+
+    if (fieldCount === 0) {
+      ui.addFlagWithLink(
+        "default",
+        "Form Fields",
+        null,
+        "Form Fields",
+        "Form present (fields could not be inspected)",
+      );
+      return;
+    }
+
+    ui.addFlagWithLink(
+      descriptionCount >= fieldCount ? "success" : "warning",
+      "Form Fields",
+      null,
+      "Form Fields",
+      `${pluralize(fieldCount, "field")}, ${descriptionCount} with descriptions`,
+    );
   }
 
   // Check for DisplayDocTitle and dc:title
