@@ -164,6 +164,8 @@ The `/examples` directory contains sample PDFs for testing various accessibility
 - `tagged-HTML-headings-PAC-2024-pass.pdf`: Tagged PDF with HTML headings passing PAC 2024
 - `tagged-HTML-headings-chrome.pdf`: PDF with HTML headings created in Chrome
 - `tagged-HTML-headings-chrome-espanol.pdf`: Spanish language PDF with HTML headings from Chrome
+- `tagged-structure-pass.pdf`: Handwritten, uncompressed fixture with headings, a list, a table with header cells, a figure with alt text, bookmarks, and form fields with descriptions
+- `tagged-structure-fail.pdf`: Handwritten, uncompressed fixture with the Suspects flag set, no H1, a table without header cells, a figure without alt text, no bookmarks, and form fields without descriptions
 
 ### Using Test Files
 
