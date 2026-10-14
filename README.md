@@ -64,9 +64,9 @@ Examines critical document metadata:
 2. **Analyzing Files**
    - Upload single or multiple PDF files
    - Results are displayed immediately below the upload area
-   - Each file's status is shown with details in text, a status label, and color-coded indicators:
-     - Green, labeled "(pass)": Passing checks
-     - Yellow, labeled "(warning)": Warning conditions
+   - Each file's status is shown with details in text and color-coded indicators, with a text label on checks that need attention:
+     - Green: Passing checks
+     - Yellow, labeled "(inspect)": Warning conditions
      - Red, labeled "(failure)": Failed checks
 3. **Understanding Results**
    Each PDF is analyzed for:
@@ -90,9 +90,9 @@ Examines critical document metadata:
 
 ### Visual Result States
 
-PDFcheck displays results with a text status label and color-coded indicators for quick assessment:
+PDFcheck displays results with color-coded indicators, plus a text label on warnings and failures, for quick assessment:
 
-- **Success (Green background, labeled "(pass)")**: Indicates the check passed successfully
+- **Success (Green background)**: Indicates the check passed successfully
   - Tagged: Yes
   - Language: Set with valid code (e.g., en-US)
   - Marked: True
@@ -104,7 +104,7 @@ PDFcheck displays results with a text status label and color-coded indicators fo
   - Figures: Figure and alt text counts, with alt text for every figure
   - Form Fields: Field count, with a description for every field
 
-- **Warning (Yellow background, labeled "(warning)")**: Indicates a potential issue that may need attention
+- **Warning (Yellow background, labeled "(inspect)")**: Indicates a potential issue that may need attention
   - PDF Version: Below 1.7
   - Marked: False
   - Suspects: True
@@ -123,7 +123,7 @@ PDFcheck displays results with a text status label and color-coded indicators fo
   - Marked: No
   - Document Title: Not set
 
-- **Default (Gray background, no label)**: Neutral information display
+- **Default (Gray background)**: Neutral information display
   - PDF Version display
   - File information headers
   - Bookmarks: Not found
