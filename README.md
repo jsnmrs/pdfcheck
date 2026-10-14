@@ -109,7 +109,7 @@ PDFcheck displays results with color-coded indicators, plus a text label on warn
   - Marked: False
   - Suspects: True
   - PDF/UA identifier: Not set
-  - Document Title: Empty or Not set
+  - Document Title: Empty
   - Creator Tool: Not set
   - Producer: Not set
   - Headings: None found, or no H1
@@ -126,6 +126,7 @@ PDFcheck displays results with color-coded indicators, plus a text label on warn
 - **Default (Gray background)**: Neutral information display
   - PDF Version display
   - File information headers
+  - Document Title: Title text
   - Bookmarks: Not found
   - Structure: Could not inspect, when the tag tree is compressed
   - Form Fields: Form present, when the fields are compressed

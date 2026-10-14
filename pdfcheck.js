@@ -420,7 +420,7 @@
 
       ui.addLabeledFlag("success", "Language", languageCode);
     } else {
-      ui.addLabeledFlag("failure", "Language", "not set");
+      ui.addLabeledFlag("failure", "Language", "Not set");
     }
   }
 
