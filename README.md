@@ -9,15 +9,19 @@ This tool does not validate the accessibility of PDFs and is not intended to be 
 - **Instant Local Analysis**: Check PDFs directly in your browser with no server uploads required
 - **Batch Processing**: Analyze multiple PDF files simultaneously
 - **Drag & Drop Support**: Easy file uploading through drag and drop interface
-- **Comprehensive Checks**: Evaluates multiple criteria:
-  - PDF tagging status and tag count
+- **Extensive Checks**: Evaluates multiple criteria:
+  - PDF tagging status
   - Document language settings
   - PDF/UA identifier presence
   - Document title properties
-  - PDF version detection
+  - PDF version, with a note when it is below the 1.7 that PDF/UA requires
   - Creator tool information
   - Producer details
-  - Mark information status
+  - Mark information status and the Suspects flag
+  - Bookmarks presence
+  - Heading, list, table, and figure tags, when the tag tree is uncompressed
+  - Form field descriptions
+- **CSV Export**: Download the results for every checked file as a CSV
 
 ## Key Accessibility Checks
 
@@ -26,7 +30,6 @@ This tool does not validate the accessibility of PDFs and is not intended to be 
 Verifies if the PDF contains proper structural tags, which are essential for accessibility. The tool:
 
 - Detects the presence of `StructTreeRoot`
-- Counts the number of tags if present
 - Clearly indicates if a document is untagged
 
 ### Language Settings
@@ -61,41 +64,60 @@ Examines critical document metadata:
 2. **Analyzing Files**
    - Upload single or multiple PDF files
    - Results are displayed immediately below the upload area
-   - Each file's status is shown with details in text and color-coded indicators:
+   - Each file's status is shown with details in text and color-coded indicators, with a text label on checks that need attention:
      - Green: Passing checks
-     - Yellow: Warning conditions
-     - Red: Failed checks
+     - Yellow, labeled "(inspect)": Warning conditions
+     - Red, labeled "(failure)": Failed checks
 3. **Understanding Results**
    Each PDF is analyzed for:
    - PDF version
-   - Tag status and count
+   - Tag status
    - Language settings
    - PDF/UA identifier
    - Document title
    - Creator tool
    - Producer information
    - Mark information status
+   - Suspects flag
+   - Bookmarks
+   - Headings, lists, tables, and figures, when the tag tree is uncompressed
+   - Form fields and their descriptions
+4. **Exporting Results**
+   - After the checks finish, select "Download results as CSV"
+   - The file has one row per check with the file name, check, result, and status
 
 ## Examples
 
 ### Visual Result States
 
-PDFcheck displays results with color-coded indicators for quick assessment:
+PDFcheck displays results with color-coded indicators, plus a text label on warnings and failures, for quick assessment:
 
 - **Success (Green background)**: Indicates the check passed successfully
-  - Tagged: Yes (with tag count)
+  - Tagged: Yes
   - Language: Set with valid code (e.g., en-US)
   - Marked: True
   - PDF/UA identifier: Yes
+  - Bookmarks: Present
+  - Headings: Counts by level, starting with an H1
+  - Lists: List and item counts
+  - Tables: Table and header cell counts
+  - Figures: Figure and alt text counts, with alt text for every figure
+  - Form Fields: Field count, with a description for every field
 
-- **Warning (Yellow background)**: Indicates a potential issue that may need attention
+- **Warning (Yellow background, labeled "(inspect)")**: Indicates a potential issue that may need attention
+  - PDF Version: Below 1.7
   - Marked: False
+  - Suspects: True
   - PDF/UA identifier: Not set
-  - Document Title: Empty or Not set
+  - Document Title: Empty
   - Creator Tool: Not set
   - Producer: Not set
+  - Headings: None found, or no H1
+  - Tables: No header cells
+  - Figures: Fewer alt text entries than figures
+  - Form Fields: Fewer descriptions than fields
 
-- **Failure (Red background)**: Indicates a critical accessibility issue
+- **Failure (Red background, labeled "(failure)")**: Indicates a critical accessibility issue
   - Tagged: No
   - Language: Not set
   - Marked: No
@@ -104,6 +126,10 @@ PDFcheck displays results with color-coded indicators for quick assessment:
 - **Default (Gray background)**: Neutral information display
   - PDF Version display
   - File information headers
+  - Document Title: Title text
+  - Bookmarks: Not found
+  - Structure: Could not inspect, when the tag tree is compressed
+  - Form Fields: Form present, when the fields are compressed
 
 ### Batch Processing
 
@@ -119,8 +145,8 @@ PDFcheck is designed as a quick screening tool with the following limitations:
 - Uses text-based PDF analysis which may not detect all edge cases
 - Does not check for proper reading order
 - Cannot validate alt text quality or appropriateness
-- Does not examine table structure validity
-- Cannot detect issues with form field labels or descriptions
+- Reads heading, list, table, figure, and form field tags only when the producer left the tag tree uncompressed, and reports when it could not
+- Counts tags and does not validate that they are correct or attached to the right content
 - Does not replace the need for manual accessibility testing
 
 ## Technical Architecture
@@ -164,6 +190,8 @@ The `/examples` directory contains sample PDFs for testing various accessibility
 - `tagged-HTML-headings-PAC-2024-pass.pdf`: Tagged PDF with HTML headings passing PAC 2024
 - `tagged-HTML-headings-chrome.pdf`: PDF with HTML headings created in Chrome
 - `tagged-HTML-headings-chrome-espanol.pdf`: Spanish language PDF with HTML headings from Chrome
+- `tagged-structure-pass.pdf`: Handwritten, uncompressed fixture with headings, a list, a table with header cells, a figure with alt text, bookmarks, and form fields with descriptions
+- `tagged-structure-fail.pdf`: Handwritten, uncompressed fixture with the Suspects flag set, no H1, a table without header cells, a figure without alt text, no bookmarks, and form fields without descriptions
 
 ### Using Test Files
 

@@ -1,0 +1,164 @@
+%PDF-1.7
+%‚„œ”
+1 0 obj
+<</Type /Catalog /Pages 2 0 R /Lang(en-US) /MarkInfo <</Marked true>> /StructTreeRoot 4 0 R /ViewerPreferences <</DisplayDocTitle true>> /Metadata 40 0 R /AcroForm <</Fields [30 0 R 31 0 R] /DA (/Helv 0 Tf 0 g) /DR <</Font <</Helv 10 0 R>>>>>> /Outlines 20 0 R>>
+endobj
+2 0 obj
+<</Type /Pages /Kids [3 0 R] /Count 1>>
+endobj
+3 0 obj
+<</Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 5 0 R /Resources <</Font <</Helv 10 0 R>>>> /StructParents 0 /Annots [30 0 R 31 0 R] /Tabs /S>>
+endobj
+4 0 obj
+<</Type /StructTreeRoot /K [6 0 R] /ParentTree 7 0 R /ParentTreeNextKey 1>>
+endobj
+5 0 obj
+<< /Length 481>>
+stream
+/H1 <</MCID 0>> BDC
+BT /Helv 18 Tf 72 720 Td (Heading one) Tj ET
+EMC
+/H2 <</MCID 1>> BDC
+BT /Helv 14 Tf 72 690 Td (Heading two) Tj ET
+EMC
+/LBody <</MCID 2>> BDC
+BT /Helv 12 Tf 90 660 Td (First list item) Tj ET
+EMC
+/LBody <</MCID 3>> BDC
+BT /Helv 12 Tf 90 640 Td (Second list item) Tj ET
+EMC
+/TH <</MCID 4>> BDC
+BT /Helv 12 Tf 72 600 Td (Header cell) Tj ET
+EMC
+/TD <</MCID 5>> BDC
+BT /Helv 12 Tf 200 600 Td (Data cell) Tj ET
+EMC
+/Figure <</MCID 6>> BDC
+0.5 g 72 300 100 100 re f
+EMC
+endstream
+endobj
+6 0 obj
+<</Type /StructElem /S /Document /P 4 0 R /K [8 0 R 9 0 R 11 0 R 12 0 R 13 0 R]>>
+endobj
+7 0 obj
+<</Nums [0 14 0 R]>>
+endobj
+8 0 obj
+<</Type /StructElem /S /H1 /P 6 0 R /Pg 3 0 R /K 0>>
+endobj
+9 0 obj
+<</Type /StructElem /S /H2 /P 6 0 R /Pg 3 0 R /K 1>>
+endobj
+10 0 obj
+<</Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding>>
+endobj
+11 0 obj
+<</Type /StructElem /S /L /P 6 0 R /K [15 0 R 16 0 R]>>
+endobj
+12 0 obj
+<</Type /StructElem /S /Table /P 6 0 R /K [19 0 R]>>
+endobj
+13 0 obj
+<</Type /StructElem /S /Figure /P 6 0 R /Pg 3 0 R /Alt (Gray square used as a placeholder figure) /K 6>>
+endobj
+14 0 obj
+[8 0 R 9 0 R 17 0 R 18 0 R 21 0 R 22 0 R 13 0 R]
+endobj
+15 0 obj
+<</Type /StructElem /S /LI /P 11 0 R /K [17 0 R]>>
+endobj
+16 0 obj
+<</Type /StructElem /S /LI /P 11 0 R /K [18 0 R]>>
+endobj
+17 0 obj
+<</Type /StructElem /S /LBody /P 15 0 R /Pg 3 0 R /K 2>>
+endobj
+18 0 obj
+<</Type /StructElem /S /LBody /P 16 0 R /Pg 3 0 R /K 3>>
+endobj
+19 0 obj
+<</Type /StructElem /S /TR /P 12 0 R /K [21 0 R 22 0 R]>>
+endobj
+20 0 obj
+<</Type /Outlines /First 23 0 R /Last 23 0 R /Count 1>>
+endobj
+21 0 obj
+<</Type /StructElem /S /TH /P 19 0 R /Pg 3 0 R /K 4>>
+endobj
+22 0 obj
+<</Type /StructElem /S /TD /P 19 0 R /Pg 3 0 R /K 5>>
+endobj
+23 0 obj
+<</Title (Heading one) /Parent 20 0 R /Dest [3 0 R /XYZ 0 792 0]>>
+endobj
+30 0 obj
+<</Type /Annot /Subtype /Widget /FT /Tx /T (name) /TU (Your full name) /Rect [72 520 300 540] /F 4 /P 3 0 R /DA (/Helv 12 Tf 0 g) /MK <</BC [0 0 0]>>>>
+endobj
+31 0 obj
+<</Type /Annot /Subtype /Widget /FT /Tx /T (email) /TU (Your email address) /Rect [72 480 300 500] /F 4 /P 3 0 R /DA (/Helv 12 Tf 0 g) /MK <</BC [0 0 0]>>>>
+endobj
+40 0 obj
+<< /Type /Metadata /Subtype /XML /Length 580>>
+stream
+<?xpacket begin="" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/">
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:pdf="http://ns.adobe.com/pdf/1.3/">
+<dc:title><rdf:Alt><rdf:li xml:lang="x-default">Structure fixture (pass)</rdf:li></rdf:Alt></dc:title>
+<xmp:CreatorTool>PDFcheck fixture script</xmp:CreatorTool>
+<pdf:Producer>Handwritten PDF</pdf:Producer>
+</rdf:Description>
+</rdf:RDF>
+</x:xmpmeta>
+<?xpacket end="w"?>
+endstream
+endobj
+xref
+0 41
+0000000000 65535 f 
+0000000015 00000 n 
+0000000293 00000 n 
+0000000348 00000 n 
+0000000521 00000 n 
+0000000612 00000 n 
+0000001143 00000 n 
+0000001240 00000 n 
+0000001276 00000 n 
+0000001344 00000 n 
+0000001412 00000 n 
+0000001508 00000 n 
+0000001580 00000 n 
+0000001649 00000 n 
+0000001770 00000 n 
+0000001835 00000 n 
+0000001902 00000 n 
+0000001969 00000 n 
+0000002042 00000 n 
+0000002115 00000 n 
+0000002189 00000 n 
+0000002261 00000 n 
+0000002331 00000 n 
+0000002401 00000 n 
+0000000000 65535 f 
+0000000000 65535 f 
+0000000000 65535 f 
+0000000000 65535 f 
+0000000000 65535 f 
+0000000000 65535 f 
+0000002484 00000 n 
+0000002652 00000 n 
+0000000000 65535 f 
+0000000000 65535 f 
+0000000000 65535 f 
+0000000000 65535 f 
+0000000000 65535 f 
+0000000000 65535 f 
+0000000000 65535 f 
+0000000000 65535 f 
+0000002825 00000 n 
+trailer
+<</Size 41 /Root 1 0 R>>
+startxref
+3486
+%%EOF

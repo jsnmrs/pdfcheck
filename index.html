@@ -81,7 +81,7 @@
         padding-block: 0.25em;
         padding-inline: 1em;
       }
-      article {
+      .test {
         margin-block-end: 2.5em;
       }
       h1 {
@@ -150,6 +150,14 @@
       blockquote p {
         margin-block-end: 0.5em;
       }
+      .disclaimer {
+        background-color: var(--color-bg-default);
+        border: 1px solid var(--color-border);
+        border-inline-start: 0.35em solid var(--color-default);
+        color: var(--color-default);
+        padding-block: 0.65em;
+        padding-inline: 0.65em;
+      }
       small {
         padding-inline-start: 0.15em;
       }
@@ -187,13 +195,7 @@
         border-color: var(--color-failure);
       }
       .flag[data-status="failure"]::after {
-        content: attr(data-status);
-        clip-path: inset(50%);
-        height: 1px;
-        overflow: hidden;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
+        content: "(failure)";
       }
       .flag[data-status="warning"] {
         background-color: var(--color-bg-warning);
@@ -201,28 +203,13 @@
         border-color: var(--color-warning);
       }
       .flag[data-status="warning"]::after {
-        content: attr(data-status);
-        clip-path: inset(50%);
-        height: 1px;
-        overflow: hidden;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
+        content: "(inspect)";
       }
       .flag[data-status="success"],
       .is-dragover {
         background-color: var(--color-bg-success);
         color: var(--color-success);
         border-color: var(--color-success);
-      }
-      .flag[data-status="success"]::after {
-        content: attr(data-status);
-        clip-path: inset(50%);
-        height: 1px;
-        overflow: hidden;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
       }
       .title {
         font-size: 1.5em;
@@ -308,6 +295,12 @@
       <div class="wrap">
         <div>
           <section aria-labelledby="checks">
+            <p>
+            PDFcheck looks for signs of inaccessibility. It can tell you a
+            feature is missing, but it can&rsquo;t tell you a feature is
+            correct. Treat it as a first pass before testing with
+            Acrobat&rsquo;s accessibility checker, <a href="https://pac.pdf-accessibility.org/en">PAC</a>, a keyboard, and a screen reader.
+          </p>
             <h2 id="checks">Add files to review</h2>
             <p>
               Files are only loaded locally and are not transmitted anywhere.
@@ -316,6 +309,7 @@
                 >example PDF files from the GitHub repo to check</a
               >.
             </p>
+
 
             <form class="box" id="dropzone">
               <svg
@@ -389,7 +383,7 @@
                     >Tagged<span class="visually-hidden"> test details</span></a
                   ></strong
                 >
-                <span>Yes (38 tags)</span>
+                <span>Yes</span>
               </p>
               <p class="flag" data-status="success">
                 <strong
@@ -419,7 +413,32 @@
                 >
                 <span>Yes</span>
               </p>
+              <p class="flag" data-status="success">
+                <strong
+                  ><a href="#help-bookmarks"
+                    >Bookmarks<span class="visually-hidden">
+                      test details</span
+                    ></a
+                  ></strong
+                >
+                <span>Present</span>
+              </p>
+              <p class="flag" data-status="default">
+                <strong
+                  ><a href="#help-structure"
+                    >Structure<span class="visually-hidden">
+                      test details</span
+                    ></a
+                  ></strong
+                >
+                <span>Could not inspect (compressed structure tree)</span>
+              </p>
             </div>
+            <p class="export">
+              <button type="button" id="export-csv" hidden>
+                Download results as CSV
+              </button>
+            </p>
             <div id="report"></div>
             <div class="visually-hidden" role="status" id="announce"></div>
           </section>
@@ -427,7 +446,7 @@
         <section class="help" aria-labelledby="tests">
           <h2 id="tests" tabindex="-1">Tests</h2>
           <p><span id="learn">Learn more about </span>the tests and results.</p>
-          <article id="help-tagged" tabindex="-1">
+          <div class="test" id="help-tagged" tabindex="-1">
             <h3>Tagged</h3>
             <p>
               This check indicates that tags are present in the document.
@@ -439,13 +458,13 @@
             </p>
             <h4>Possible tagged values:</h4>
             <p class="flag" data-status="success">
-              <strong>Tagged</strong> <span>Yes (# tags)</span>
+              <strong>Tagged</strong> <span>Yes</span>
             </p>
             <p class="flag" data-status="failure">
               <strong>Tagged</strong> <span>No</span>
             </p>
-          </article>
-          <article id="help-language" tabindex="-1">
+          </div>
+          <div class="test" id="help-language" tabindex="-1">
             <h3>Language</h3>
             <p>
               All documents should have the language attribute set. For example,
@@ -459,13 +478,13 @@
             </p>
             <h4>Possible language values:</h4>
             <p class="flag" data-status="success">
-              <strong>Language</strong> <span>(Language abbreviation)</span>
+              <strong>Language</strong> <span>Language abbreviation</span>
             </p>
             <p class="flag" data-status="failure">
               <strong>Language</strong> <span>Not set</span>
             </p>
-          </article>
-          <article id="help-marked" tabindex="-1">
+          </div>
+          <div class="test" id="help-marked" tabindex="-1">
             <h3>Marked</h3>
             <blockquote>
               <p>
@@ -497,8 +516,8 @@
             <p class="flag" data-status="failure">
               <strong>Marked</strong> <span>No</span>
             </p>
-          </article>
-          <article id="help-pdfua" tabindex="-1">
+          </div>
+          <div class="test" id="help-pdfua" tabindex="-1">
             <h3>PDF/UA identifier</h3>
             <p>This checkpoint isn&rsquo;t a deal breaker.</p>
             <blockquote>
@@ -528,25 +547,25 @@
             <p class="flag" data-status="warning">
               <strong>PDF/UA identifier</strong> <span>Not set</span>
             </p>
-          </article>
-          <article id="help-title" tabindex="-1">
+          </div>
+          <div class="test" id="help-title" tabindex="-1">
             <h3>Document Title</h3>
             <p>
               A conformant PDF will have a readable title specified in File
               &rarr; Properties.
             </p>
             <h4>Possible document title values:</h4>
-            <p class="flag" data-status="success">
+            <p class="flag" data-status="default">
               <strong>Document Title</strong> <span>Document title</span>
             </p>
             <p class="flag" data-status="warning">
               <strong>Document Title</strong> <span>Empty</span>
             </p>
-            <p class="flag" data-status="warning">
+            <p class="flag" data-status="failure">
               <strong>Document Title</strong> <span>Not set</span>
             </p>
-          </article>
-          <article id="help-display-title" tabindex="-1">
+          </div>
+          <div class="test" id="help-display-title" tabindex="-1">
             <h3>Display Document Title</h3>
             <p>
               When enabled, PDF viewers will display the document title in the
@@ -568,7 +587,162 @@
               <strong>Display Document Title</strong>
               <span>Not configured</span>
             </p>
-          </article>
+          </div>
+          <div class="test" id="help-version" tabindex="-1">
+            <h3>PDF Version</h3>
+            <p>
+              PDF/UA (ISO 14289-1), the accessibility standard for PDF, builds
+              on PDF 1.7. A file with an earlier version can still be tagged and
+              usable, so this isn&rsquo;t a deal breaker on its own. Saving the
+              file again from a current tool usually updates the version.
+            </p>
+            <h4>Possible PDF version values:</h4>
+            <p class="flag" data-status="default">
+              <strong>PDF Version</strong> <span>1.7</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>PDF Version</strong>
+              <span>1.4 (PDF/UA requires 1.7 or later)</span>
+            </p>
+          </div>
+          <div class="test" id="help-suspects" tabindex="-1">
+            <h3>Suspects</h3>
+            <p>
+              The Suspects entry in the mark information dictionary means the
+              producer found content it couldn&rsquo;t tag with confidence.
+              Acrobat sets it after some auto-tagging and OCR steps. Review the
+              tags before trusting them. This check only appears when the flag
+              is set.
+            </p>
+            <h4>Possible suspects values:</h4>
+            <p class="flag" data-status="warning">
+              <strong>Suspects</strong> <span>True</span>
+            </p>
+          </div>
+          <div class="test" id="help-bookmarks" tabindex="-1">
+            <h3>Bookmarks</h3>
+            <p>
+              Bookmarks (the outline shown in a viewer&rsquo;s side panel) let
+              people jump to a section without paging through the document.
+              Common federal guidance, including the HHS checklist, calls for
+              bookmarks in documents of 9 or more pages. PDFcheck can&rsquo;t
+              read the page count reliably, so a missing outline is shown as
+              information rather than a warning.
+            </p>
+            <h4>Possible bookmarks values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Bookmarks</strong> <span>Present</span>
+            </p>
+            <p class="flag" data-status="default">
+              <strong>Bookmarks</strong> <span>Not found</span>
+            </p>
+          </div>
+          <div class="test" id="help-forms" tabindex="-1">
+            <h3>Form Fields</h3>
+            <p>
+              Each form field needs a description (the tooltip, stored as TU) so
+              a screen reader can announce what to type or choose. This check
+              only appears when the file has a form. Fields are counted from
+              uncompressed field dictionaries, and radio button and checkbox
+              groups can make the count approximate.
+            </p>
+            <h4>Possible form fields values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Form Fields</strong>
+              <span>2 fields, 2 with descriptions</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>Form Fields</strong>
+              <span>5 fields, 2 with descriptions</span>
+            </p>
+            <p class="flag" data-status="default">
+              <strong>Form Fields</strong>
+              <span>Form present (fields could not be inspected)</span>
+            </p>
+          </div>
+          <div class="test" id="help-structure" tabindex="-1">
+            <h3>Structure</h3>
+            <p>
+              The checks for headings, lists, tables, and figures read the tag
+              tree as plain text. Many tools, including Acrobat and Word, store
+              the tag tree in compressed object streams that PDFcheck
+              can&rsquo;t open. When that happens this flag appears instead of
+              those checks. It says nothing about whether the tags are good or
+              bad, so open the file in PAC or Acrobat to inspect them.
+            </p>
+            <h4>Possible structure values:</h4>
+            <p class="flag" data-status="default">
+              <strong>Structure</strong>
+              <span>Could not inspect (compressed structure tree)</span>
+            </p>
+          </div>
+          <div class="test" id="help-headings" tabindex="-1">
+            <h3>Headings</h3>
+            <p>
+              Headings give screen reader users a way to skim and jump through
+              the document, and every document should start with an H1. This
+              check counts heading tags by level and flags a missing H1. It
+              doesn&rsquo;t check whether levels are skipped or whether the text
+              makes sense as a heading.
+            </p>
+            <h4>Possible headings values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Headings</strong> <span>H1: 1, H2: 3, H3: 2</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>Headings</strong> <span>No H1 (H2: 3, H3: 2)</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>Headings</strong> <span>None found</span>
+            </p>
+          </div>
+          <div class="test" id="help-lists" tabindex="-1">
+            <h3>Lists</h3>
+            <p>
+              Tagged lists tell assistive technology how many items there are
+              and where each one starts. This check counts list and list item
+              tags and only appears when the file has at least one list.
+            </p>
+            <h4>Possible lists values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Lists</strong> <span>2 lists, 7 items</span>
+            </p>
+          </div>
+          <div class="test" id="help-tables" tabindex="-1">
+            <h3>Tables</h3>
+            <p>
+              Data tables need header cells (TH tags) so a screen reader can
+              announce the row or column each cell belongs to. This check counts
+              table and header cell tags and only appears when the file has at
+              least one table. It can&rsquo;t tell whether the headers are
+              attached to the correct cells.
+            </p>
+            <h4>Possible tables values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Tables</strong> <span>2 tables, 8 header cells</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>Tables</strong> <span>2 tables, no header cells</span>
+            </p>
+          </div>
+          <div class="test" id="help-figures" tabindex="-1">
+            <h3>Figures</h3>
+            <p>
+              Each figure tag needs alternative text (the Alt entry) that
+              describes the image. This check counts figure tags and alt text
+              entries across the whole file. It can&rsquo;t match an entry to a
+              specific figure or judge whether the text is useful. The check
+              only appears when the file has at least one figure.
+            </p>
+            <h4>Possible figures values:</h4>
+            <p class="flag" data-status="success">
+              <strong>Figures</strong>
+              <span>3 figures, 3 alt text entries</span>
+            </p>
+            <p class="flag" data-status="warning">
+              <strong>Figures</strong> <span>3 figures, 1 alt text entry</span>
+            </p>
+          </div>
         </section>
       </div>
     </main>
