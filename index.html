@@ -203,16 +203,13 @@
         border-color: var(--color-warning);
       }
       .flag[data-status="warning"]::after {
-        content: "(warning)";
+        content: "(inspect)";
       }
       .flag[data-status="success"],
       .is-dragover {
         background-color: var(--color-bg-success);
         color: var(--color-success);
         border-color: var(--color-success);
-      }
-      .flag[data-status="success"]::after {
-        content: "(pass)";
       }
       .title {
         font-size: 1.5em;
@@ -481,7 +478,7 @@
             </p>
             <h4>Possible language values:</h4>
             <p class="flag" data-status="success">
-              <strong>Language</strong> <span>(Language abbreviation)</span>
+              <strong>Language</strong> <span>Language abbreviation</span>
             </p>
             <p class="flag" data-status="failure">
               <strong>Language</strong> <span>Not set</span>
