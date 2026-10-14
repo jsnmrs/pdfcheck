@@ -64,10 +64,10 @@ Examines critical document metadata:
 2. **Analyzing Files**
    - Upload single or multiple PDF files
    - Results are displayed immediately below the upload area
-   - Each file's status is shown with details in text and color-coded indicators:
-     - Green: Passing checks
-     - Yellow: Warning conditions
-     - Red: Failed checks
+   - Each file's status is shown with details in text, a status label, and color-coded indicators:
+     - Green, labeled "(pass)": Passing checks
+     - Yellow, labeled "(warning)": Warning conditions
+     - Red, labeled "(failure)": Failed checks
 3. **Understanding Results**
    Each PDF is analyzed for:
    - PDF version
@@ -90,9 +90,9 @@ Examines critical document metadata:
 
 ### Visual Result States
 
-PDFcheck displays results with color-coded indicators for quick assessment:
+PDFcheck displays results with a text status label and color-coded indicators for quick assessment:
 
-- **Success (Green background)**: Indicates the check passed successfully
+- **Success (Green background, labeled "(pass)")**: Indicates the check passed successfully
   - Tagged: Yes
   - Language: Set with valid code (e.g., en-US)
   - Marked: True
@@ -104,7 +104,7 @@ PDFcheck displays results with color-coded indicators for quick assessment:
   - Figures: Figure and alt text counts, with alt text for every figure
   - Form Fields: Field count, with a description for every field
 
-- **Warning (Yellow background)**: Indicates a potential issue that may need attention
+- **Warning (Yellow background, labeled "(warning)")**: Indicates a potential issue that may need attention
   - PDF Version: Below 1.7
   - Marked: False
   - Suspects: True
@@ -117,13 +117,13 @@ PDFcheck displays results with color-coded indicators for quick assessment:
   - Figures: Fewer alt text entries than figures
   - Form Fields: Fewer descriptions than fields
 
-- **Failure (Red background)**: Indicates a critical accessibility issue
+- **Failure (Red background, labeled "(failure)")**: Indicates a critical accessibility issue
   - Tagged: No
   - Language: Not set
   - Marked: No
   - Document Title: Not set
 
-- **Default (Gray background)**: Neutral information display
+- **Default (Gray background, no label)**: Neutral information display
   - PDF Version display
   - File information headers
   - Bookmarks: Not found

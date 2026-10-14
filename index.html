@@ -195,13 +195,7 @@
         border-color: var(--color-failure);
       }
       .flag[data-status="failure"]::after {
-        content: attr(data-status);
-        clip-path: inset(50%);
-        height: 1px;
-        overflow: hidden;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
+        content: "(failure)";
       }
       .flag[data-status="warning"] {
         background-color: var(--color-bg-warning);
@@ -209,13 +203,7 @@
         border-color: var(--color-warning);
       }
       .flag[data-status="warning"]::after {
-        content: attr(data-status);
-        clip-path: inset(50%);
-        height: 1px;
-        overflow: hidden;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
+        content: "(warning)";
       }
       .flag[data-status="success"],
       .is-dragover {
@@ -224,13 +212,7 @@
         border-color: var(--color-success);
       }
       .flag[data-status="success"]::after {
-        content: attr(data-status);
-        clip-path: inset(50%);
-        height: 1px;
-        overflow: hidden;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
+        content: "(pass)";
       }
       .title {
         font-size: 1.5em;

@@ -50,16 +50,18 @@
       tempNode.className = "flag";
       tempNode.dataset.status = className;
 
+      const span = document.createElement("span");
       if (isHTML) {
         // Parse the HTML string safely
         const parser = new DOMParser();
         const doc = parser.parseFromString(content, "text/html");
         while (doc.body.firstChild) {
-          tempNode.appendChild(doc.body.firstChild);
+          span.appendChild(doc.body.firstChild);
         }
       } else {
-        tempNode.textContent = content;
+        span.textContent = content;
       }
+      tempNode.appendChild(span);
 
       results.push({
         file: "",
